@@ -36,7 +36,7 @@ function initPhoneValidation() {
 
   // التحقق عند مغادرة الحقل
   phoneInput.addEventListener('blur', () => {
-    if (phoneInput.value.length > 0) validatePhone(phoneInput, phoneError, true);
+    validatePhone(phoneInput, phoneError, true);
   });
 }
 
@@ -44,23 +44,16 @@ function validatePhone(input, errorEl, strict = false) {
   const val = input.value;
   const algerianPattern = /^0[567]\d{8}$/;
 
+  // إجباري — فارغ = خطأ عند التشديد
   if (val.length === 0) {
-    // اختياري - لا خطأ إذا فارغ
-    if (errorEl) errorEl.style.display = 'none';
-    input.style.borderColor = '';
-    return true;
-  }
-
-  if (strict && val.length < 10) {
-    if (errorEl) errorEl.style.display = 'block';
-    input.style.borderColor = '#f87171';
-    return false;
-  }
-
-  if (val.length === 10 && !algerianPattern.test(val)) {
-    if (errorEl) errorEl.style.display = 'block';
-    input.style.borderColor = '#f87171';
-    return false;
+    if (strict) {
+      if (errorEl) { errorEl.textContent = '⚠️ رقم الهاتف إجباري'; errorEl.style.display = 'block'; }
+      input.style.borderColor = '#f87171';
+    } else {
+      if (errorEl) errorEl.style.display = 'none';
+      input.style.borderColor = '';
+    }
+    return val.length > 0;
   }
 
   if (val.length === 10 && algerianPattern.test(val)) {
@@ -69,7 +62,13 @@ function validatePhone(input, errorEl, strict = false) {
     return true;
   }
 
-  // جاري الكتابة - لا تظهر الخطأ
+  if (strict || val.length === 10) {
+    if (errorEl) { errorEl.textContent = '⚠️ رقم الهاتف يجب أن يكون 10 أرقام ويبدأ بـ 05 أو 06 أو 07'; errorEl.style.display = 'block'; }
+    input.style.borderColor = '#f87171';
+    return false;
+  }
+
+  // جاري الكتابة
   if (errorEl) errorEl.style.display = 'none';
   input.style.borderColor = '';
   return false;
@@ -151,18 +150,23 @@ async function submitComplaint(e) {
   e.preventDefault();
   const btn = document.getElementById('submitBtn');
 
-  // التحقق من رقم الهاتف إذا أُدخل
+  // التحقق من رقم الهاتف — إجباري
   const phoneInput = document.getElementById('cPhone');
   const phoneError = document.getElementById('phoneError');
-  if (phoneInput && phoneInput.value.length > 0) {
-    const algerianPattern = /^0[567]\d{8}$/;
-    if (!algerianPattern.test(phoneInput.value)) {
-      if (phoneError) phoneError.style.display = 'block';
-      phoneInput.style.borderColor = '#f87171';
-      phoneInput.focus();
-      showToast('⚠️ رقم الهاتف غير صحيح — يجب أن يكون 10 أرقام ويبدأ بـ 05 أو 06 أو 07', 'warning');
-      return;
-    }
+  const algerianPattern = /^0[567]\d{8}$/;
+
+  if (!phoneInput || phoneInput.value.length === 0) {
+    if (phoneError) { phoneError.textContent = '⚠️ رقم الهاتف إجباري'; phoneError.style.display = 'block'; }
+    if (phoneInput) { phoneInput.style.borderColor = '#f87171'; phoneInput.focus(); }
+    showToast('⚠️ رقم الهاتف إجباري — يرجى إدخاله', 'warning');
+    return;
+  }
+  if (!algerianPattern.test(phoneInput.value)) {
+    if (phoneError) { phoneError.textContent = '⚠️ رقم الهاتف يجب أن يكون 10 أرقام ويبدأ بـ 05 أو 06 أو 07'; phoneError.style.display = 'block'; }
+    phoneInput.style.borderColor = '#f87171';
+    phoneInput.focus();
+    showToast('⚠️ رقم الهاتف غير صحيح — يجب أن يكون 10 أرقام ويبدأ بـ 05 أو 06 أو 07', 'warning');
+    return;
   }
 
   btn.disabled = true;

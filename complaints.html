@@ -85,10 +85,25 @@
               <input type="text" class="form-input" id="cName" placeholder="أدخل اسمك الكامل" required>
             </div>
             <div class="form-group">
-              <label class="form-label">رقم الهاتف <span style="color:rgba(255,255,255,0.35);font-size:12px;">(اختياري)</span></label>
-              <input type="tel" class="form-input" id="cPhone" placeholder="0X XX XX XX XX" dir="ltr" style="text-align:left; letter-spacing:1px; font-family:monospace; font-size:15px;" maxlength="10" pattern="0[567]\d{8}" title="أدخل رقم هاتف جزائري صحيح مكوّن من 10 أرقام يبدأ بـ 05 أو 06 أو 07" inputmode="numeric">
-              <small id="phoneError" style="color:#f87171;font-size:12px;display:none;margin-top:4px;">⚠️ رقم الهاتف يجب أن يكون 10 أرقام ويبدأ بـ 05 أو 06 أو 07</small>
+              <label class="form-label">رقم الهاتف *</label>
+              <input
+                type="tel"
+                class="form-input"
+                id="cPhone"
+                placeholder="أدخل رقم هاتفك (05/06/07...)"
+                dir="rtl"
+                style="letter-spacing:1px; font-family:monospace; font-size:15px;"
+                maxlength="10"
+                pattern="0[567]\d{8}"
+                title="أدخل رقم هاتف جزائري صحيح مكوّن من 10 أرقام يبدأ بـ 05 أو 06 أو 07"
+                inputmode="numeric"
+                required
+              >
+              <small id="phoneError" style="color:#f87171;font-size:12px;display:none;margin-top:4px;">
+                ⚠️ رقم الهاتف يجب أن يكون 10 أرقام ويبدأ بـ 05 أو 06 أو 07
+              </small>
             </div>
+
           </div>
 
           <div class="form-row">

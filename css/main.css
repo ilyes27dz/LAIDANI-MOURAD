@@ -30,7 +30,11 @@
 /* ─── Reset ─── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-html { scroll-behavior: smooth; }
+html {
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+  width: 100%;
+}
 
 body {
   font-family: var(--font);
@@ -39,6 +43,8 @@ body {
   direction: rtl;
   overflow-x: hidden;
   line-height: 1.7;
+  width: 100%;
+  position: relative;
 }
 
 a { text-decoration: none; color: inherit; }
@@ -505,30 +511,31 @@ input, textarea, select { font-family: var(--font); }
     align-items: center !important;
     padding: 0 16px !important;
     width: 100% !important;
+    position: relative !important;
   }
 
   /* ── زر القائمة في أقصى اليمين (الترتيب الطبيعي في RTL) ── */
   .hamburger {
     display: flex !important;
-    order: 1 !important; /* في RTL، أول عنصر هو اليمين تماماً */
+    order: 1 !important;
     margin: 0 !important;
-    background: rgba(255,255,255,0.08);
-    border-radius: 8px;
-    padding: 9px 10px;
-    border: 1px solid rgba(201,162,39,0.3);
-    cursor: pointer;
-    z-index: 1002;
+    background: rgba(201, 162, 39, 0.12) !important;
+    border-radius: 8px !important;
+    padding: 10px !important;
+    border: 1.5px solid var(--gold) !important;
+    cursor: pointer !important;
+    z-index: 100000 !important;
   }
   .hamburger span {
-    width: 22px;
-    height: 2.5px;
-    background: #ffffff;
-    border-radius: 99px;
-    transition: var(--transition);
+    width: 22px !important;
+    height: 2.5px !important;
+    background: #ffffff !important;
+    border-radius: 99px !important;
+    transition: var(--transition) !important;
   }
-  .hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); background: var(--gold); }
+  .hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); background: var(--gold) !important; }
   .hamburger.active span:nth-child(2) { opacity: 0; }
-  .hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); background: var(--gold); }
+  .hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); background: var(--gold) !important; }
 
   /* ── شعار الموقع على اليسار في RTL ── */
   .nav-logo {
@@ -536,81 +543,90 @@ input, textarea, select { font-family: var(--font); }
     display: flex !important;
     align-items: center !important;
     gap: 8px !important;
-    margin-right: auto;
+    margin-right: auto !important;
   }
   .logo-sub { display: none !important; }
-  .logo-name { font-size: 15px !important; font-weight: 700; }
+  .logo-name { font-size: 15px !important; font-weight: 700 !important; }
 
   /* ── الشريط الجانبي الفخم ── */
   .nav-links {
     position: fixed !important;
     top: 0 !important;
-    right: 0 !important;
-    transform: translateX(105%) !important;
-    width: 285px !important;
-    max-width: 85vw !important;
+    right: -320px !important;
+    left: auto !important;
+    width: 280px !important;
+    max-width: 80vw !important;
     height: 100vh !important;
     height: 100dvh !important;
-    background: #0d1527 !important;
-    box-shadow: -10px 0 35px rgba(0,0,0,0.85) !important;
+    background: #090e1c !important;
+    box-shadow: -10px 0 50px rgba(0,0,0,0.9) !important;
+    display: flex !important;
     flex-direction: column !important;
     align-items: stretch !important;
-    padding: 24px 16px !important;
-    gap: 8px !important;
-    transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1) !important;
-    border-left: 1px solid rgba(201,162,39,0.3) !important;
+    padding: 80px 16px 30px !important;
+    gap: 10px !important;
+    transition: right 0.35s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    border-left: 2px solid var(--gold) !important;
     z-index: 99999 !important;
     overflow-y: auto !important;
+    transform: none !important;
   }
   .nav-links.open {
-    transform: translateX(0) !important;
+    right: 0 !important;
   }
 
   /* روابط الشريط الجانبي بمسافات ممتازة ووضوح عالي */
   .nav-links li {
     width: 100% !important;
-    margin: 4px 0 !important;
+    margin: 2px 0 !important;
   }
   .nav-link {
     display: flex !important;
     align-items: center !important;
-    padding: 13px 18px !important;
+    padding: 14px 18px !important;
     width: 100% !important;
     font-size: 16px !important;
     font-weight: 700 !important;
-    color: #f1f5f9 !important;
-    background: rgba(255,255,255,0.04) !important;
-    border: 1px solid rgba(255,255,255,0.08) !important;
+    color: #ffffff !important;
+    background: rgba(255,255,255,0.06) !important;
+    border: 1px solid rgba(255,255,255,0.12) !important;
     border-radius: 10px !important;
     transition: all 0.2s ease !important;
   }
   .nav-link:hover {
-    background: rgba(201,162,39,0.15) !important;
-    color: #ffffff !important;
-    border-color: rgba(201,162,39,0.4) !important;
-    transform: translateX(-4px) !important;
-  }
-  .nav-link.active {
-    background: linear-gradient(135deg, rgba(0,98,51,0.6), rgba(201,162,39,0.25)) !important;
+    background: rgba(201,162,39,0.2) !important;
     color: var(--gold) !important;
     border-color: var(--gold) !important;
-    box-shadow: 0 4px 15px rgba(201,162,39,0.15) !important;
+  }
+  .nav-link.active {
+    background: linear-gradient(135deg, rgba(0,98,51,0.8), rgba(201,162,39,0.3)) !important;
+    color: var(--gold) !important;
+    border-color: var(--gold) !important;
+    box-shadow: 0 4px 15px rgba(201,162,39,0.2) !important;
   }
 
   /* ── طبقة الظلام (Overlay) ── */
   .nav-overlay {
     display: none;
     position: fixed !important;
-    inset: 0 !important;
-    background: rgba(0,0,0,0.6) !important;
-    backdrop-filter: blur(4px) !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    background: rgba(0,0,0,0.75) !important;
     z-index: 99990 !important;
-    opacity: 0;
-    transition: opacity 0.3s ease;
   }
   .nav-overlay.show {
     display: block !important;
-    opacity: 1 !important;
+  }
+
+  /* إجبار كل العناصر على التوسيط وعدم الخروج عن الشاشة */
+  .container {
+    padding: 0 16px !important;
+    width: 100% !important;
+    max-width: 100% !important;
   }
 
   .footer-grid { grid-template-columns: 1fr; gap: 32px; }

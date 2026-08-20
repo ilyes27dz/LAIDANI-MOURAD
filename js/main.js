@@ -41,17 +41,42 @@ function initHamburger() {
   const navLinks = document.getElementById('navLinks');
   if (!hamburger || !navLinks) return;
 
+  // إنشاء طبقة الخلفية (overlay) ديناميكياً
+  let overlay = document.querySelector('.nav-overlay');
+  if (!overlay) {
+    overlay = document.createElement('div');
+    overlay.className = 'nav-overlay';
+    document.body.appendChild(overlay);
+  }
+
+  function openMenu() {
+    hamburger.classList.add('active');
+    navLinks.classList.add('open');
+    overlay.classList.add('show');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeMenu() {
+    hamburger.classList.remove('active');
+    navLinks.classList.remove('open');
+    overlay.classList.remove('show');
+    document.body.style.overflow = '';
+  }
+
   hamburger.addEventListener('click', () => {
-    hamburger.classList.toggle('active');
-    navLinks.classList.toggle('open');
+    if (navLinks.classList.contains('open')) { closeMenu(); } else { openMenu(); }
   });
 
-  document.addEventListener('click', (e) => {
-    if (!hamburger.contains(e.target) && !navLinks.contains(e.target)) {
-      hamburger.classList.remove('active');
-      navLinks.classList.remove('open');
-    }
+  // إغلاق عند الضغط على الـ overlay
+  overlay.addEventListener('click', closeMenu);
+
+  // إغلاق عند اختيار رابط
+  navLinks.querySelectorAll('.nav-link').forEach(link => {
+    link.addEventListener('click', closeMenu);
   });
+
+  // إغلاق بضغط Escape
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeMenu(); });
 }
 
 // ─── Active Nav Link ────────────────────────────────────────

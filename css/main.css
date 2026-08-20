@@ -104,12 +104,8 @@ input, textarea, select { font-family: var(--font); }
   align-items: center;
   justify-content: space-between;
   gap: 24px;
-  flex-direction: row-reverse; /* hamburger أولاً في RTL */
 }
-/* على الشاشات الكبيرة نعيد الترتيب الطبيعي */
-@media (min-width: 769px) {
-  .nav-container { flex-direction: row; }
-}
+
 .nav-logo {
   display: flex;
   align-items: center;
@@ -502,113 +498,120 @@ input, textarea, select { font-family: var(--font); }
 }
 
 @media (max-width: 768px) {
-  /* ── Hamburger: يظهر على اليمين في الموبايل ── */
-  .hamburger {
-    display: flex;
-    order: -1;       /* يجعله أول عنصر = أقصى اليمين في RTL */
-    margin-left: auto;
-    background: rgba(255,255,255,0.07);
-    border-radius: 10px;
-    padding: 10px;
-    border: 1px solid rgba(255,255,255,0.12);
-    transition: var(--transition);
+  .nav-container {
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    padding: 0 16px !important;
+    width: 100% !important;
   }
-  .hamburger:hover {
-    background: rgba(201,162,39,0.15);
-    border-color: rgba(201,162,39,0.3);
+
+  /* ── زر القائمة في أقصى اليمين (الترتيب الطبيعي في RTL) ── */
+  .hamburger {
+    display: flex !important;
+    order: 1 !important; /* في RTL، أول عنصر هو اليمين تماماً */
+    margin: 0 !important;
+    background: rgba(255,255,255,0.08);
+    border-radius: 8px;
+    padding: 9px 10px;
+    border: 1px solid rgba(201,162,39,0.3);
+    cursor: pointer;
+    z-index: 1002;
   }
   .hamburger span {
     width: 22px;
     height: 2.5px;
-    background: var(--white);
+    background: #ffffff;
     border-radius: 99px;
     transition: var(--transition);
   }
   .hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); background: var(--gold); }
-  .hamburger.active span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+  .hamburger.active span:nth-child(2) { opacity: 0; }
   .hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); background: var(--gold); }
 
-  /* ── الشريط الجانبي يخرج من اليمين ── */
+  /* ── شعار الموقع على اليسار في RTL ── */
+  .nav-logo {
+    order: 2 !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    margin-right: auto;
+  }
+  .logo-sub { display: none !important; }
+  .logo-name { font-size: 15px !important; font-weight: 700; }
+
+  /* ── الشريط الجانبي الفخم ── */
   .nav-links {
-    position: fixed;
-    top: 0;
-    right: -320px;
-    left: auto;
-    width: 300px;
-    height: 100vh;
-    background: linear-gradient(180deg, #0d1a2e 0%, #0a0f1e 100%);
-    backdrop-filter: blur(30px);
-    flex-direction: column;
-    align-items: stretch;
-    padding: 0;
-    gap: 0;
-    transition: right 0.38s cubic-bezier(0.4,0,0.2,1);
-    border-left: 1px solid rgba(201,162,39,0.2);
-    box-shadow: -8px 0 40px rgba(0,0,0,0.5);
-    z-index: 1001;
-    flex-wrap: nowrap;
-    overflow-y: auto;
+    position: fixed !important;
+    top: 0 !important;
+    right: 0 !important;
+    transform: translateX(105%) !important;
+    width: 285px !important;
+    max-width: 85vw !important;
+    height: 100vh !important;
+    height: 100dvh !important;
+    background: #0d1527 !important;
+    box-shadow: -10px 0 35px rgba(0,0,0,0.85) !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    padding: 24px 16px !important;
+    gap: 8px !important;
+    transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    border-left: 1px solid rgba(201,162,39,0.3) !important;
+    z-index: 99999 !important;
+    overflow-y: auto !important;
   }
-  .nav-links.open { right: 0; }
-
-  /* رأس الشريط الجانبي */
-  .nav-links::before {
-    content: '';
-    display: block;
-    height: 70px;
-    background: linear-gradient(135deg, rgba(0,98,51,0.4), rgba(201,162,39,0.15));
-    border-bottom: 1px solid rgba(201,162,39,0.25);
-    flex-shrink: 0;
+  .nav-links.open {
+    transform: translateX(0) !important;
   }
 
-  /* روابط الشريط الجانبي */
+  /* روابط الشريط الجانبي بمسافات ممتازة ووضوح عالي */
   .nav-links li {
-    padding: 0 16px;
-    margin: 3px 0;
+    width: 100% !important;
+    margin: 4px 0 !important;
   }
   .nav-link {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 14px 20px;
-    width: 100%;
-    font-size: 16px;
-    font-weight: 600;
-    border-radius: 12px;
-    color: rgba(255,255,255,0.85);
-    transition: var(--transition);
-    border: 1px solid transparent;
-    letter-spacing: 0.3px;
+    display: flex !important;
+    align-items: center !important;
+    padding: 13px 18px !important;
+    width: 100% !important;
+    font-size: 16px !important;
+    font-weight: 700 !important;
+    color: #f1f5f9 !important;
+    background: rgba(255,255,255,0.04) !important;
+    border: 1px solid rgba(255,255,255,0.08) !important;
+    border-radius: 10px !important;
+    transition: all 0.2s ease !important;
   }
   .nav-link:hover {
-    background: rgba(255,255,255,0.07);
-    color: var(--white);
-    border-color: rgba(255,255,255,0.1);
-    transform: translateX(-4px);
+    background: rgba(201,162,39,0.15) !important;
+    color: #ffffff !important;
+    border-color: rgba(201,162,39,0.4) !important;
+    transform: translateX(-4px) !important;
   }
   .nav-link.active {
-    background: linear-gradient(135deg, rgba(0,98,51,0.35), rgba(201,162,39,0.15));
-    color: var(--gold);
-    border-color: rgba(201,162,39,0.3);
-    box-shadow: 0 4px 20px rgba(201,162,39,0.1);
+    background: linear-gradient(135deg, rgba(0,98,51,0.6), rgba(201,162,39,0.25)) !important;
+    color: var(--gold) !important;
+    border-color: var(--gold) !important;
+    box-shadow: 0 4px 15px rgba(201,162,39,0.15) !important;
   }
 
-  /* ── Overlay الخلفية ── */
+  /* ── طبقة الظلام (Overlay) ── */
   .nav-overlay {
     display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.65);
-    backdrop-filter: blur(3px);
-    z-index: 1000;
-    animation: fadeIn 0.3s ease;
+    position: fixed !important;
+    inset: 0 !important;
+    background: rgba(0,0,0,0.6) !important;
+    backdrop-filter: blur(4px) !important;
+    z-index: 99990 !important;
+    opacity: 0;
+    transition: opacity 0.3s ease;
   }
-  .nav-overlay.show { display: block; }
-  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
-  /* ── Logo مصغّر على الموبايل ── */
-  .logo-sub { display: none; }
-  .logo-name { font-size: 14px; }
+  .nav-overlay.show {
+    display: block !important;
+    opacity: 1 !important;
+  }
 
   .footer-grid { grid-template-columns: 1fr; gap: 32px; }
   .footer-bottom { flex-direction: column; gap: 8px; text-align: center; }

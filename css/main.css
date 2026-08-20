@@ -519,9 +519,9 @@ input, textarea, select { font-family: var(--font); }
     display: flex !important;
     order: 1 !important;
     margin: 0 !important;
-    background: rgba(201, 162, 39, 0.12) !important;
+    background: rgba(201, 162, 39, 0.15) !important;
     border-radius: 8px !important;
-    padding: 10px !important;
+    padding: 10px 12px !important;
     border: 1.5px solid var(--gold) !important;
     cursor: pointer !important;
     z-index: 100000 !important;
@@ -548,83 +548,81 @@ input, textarea, select { font-family: var(--font); }
   .logo-sub { display: none !important; }
   .logo-name { font-size: 15px !important; font-weight: 700 !important; }
 
-  /* ── الشريط الجانبي الفخم ── */
+  /* ── القائمة الجانبية المحدثة ── */
   .nav-links {
     position: fixed !important;
     top: 0 !important;
-    right: -320px !important;
-    left: auto !important;
+    right: 0 !important;
+    bottom: 0 !important;
     width: 280px !important;
-    max-width: 80vw !important;
+    max-width: 85vw !important;
+    height: 100% !important;
     height: 100vh !important;
     height: 100dvh !important;
-    background: #090e1c !important;
-    box-shadow: -10px 0 50px rgba(0,0,0,0.9) !important;
+    background: #0f172a !important; /* لون واضح وثابت جداً */
+    box-shadow: -10px 0 40px rgba(0,0,0,0.8) !important;
     display: flex !important;
     flex-direction: column !important;
     align-items: stretch !important;
-    padding: 80px 16px 30px !important;
-    gap: 10px !important;
-    transition: right 0.35s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    padding: 85px 16px 30px !important;
+    gap: 8px !important;
     border-left: 2px solid var(--gold) !important;
     z-index: 99999 !important;
     overflow-y: auto !important;
-    transform: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    transform: translateX(100%) !important;
+    transition: transform 0.3s ease, opacity 0.3s ease, visibility 0.3s ease !important;
   }
   .nav-links.open {
-    right: 0 !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    transform: translateX(0) !important;
   }
 
-  /* روابط الشريط الجانبي بمسافات ممتازة ووضوح عالي */
+  /* روابط الشريط الجانبي واضحة جداً بأزرار مميزة */
   .nav-links li {
     width: 100% !important;
-    margin: 2px 0 !important;
+    margin: 3px 0 !important;
     list-style: none !important;
-    position: relative !important;
-    z-index: 100000 !important;
   }
   .nav-link {
     display: flex !important;
     align-items: center !important;
-    padding: 14px 18px !important;
+    padding: 14px 20px !important;
     width: 100% !important;
     font-size: 16px !important;
     font-weight: 700 !important;
     color: #ffffff !important;
-    background: rgba(255,255,255,0.06) !important;
-    border: 1px solid rgba(255,255,255,0.12) !important;
+    background: rgba(255,255,255,0.08) !important;
+    border: 1px solid rgba(255,255,255,0.15) !important;
     border-radius: 10px !important;
     transition: all 0.2s ease !important;
     cursor: pointer !important;
-    pointer-events: auto !important;
-    position: relative !important;
-    z-index: 100001 !important;
     text-decoration: none !important;
   }
-  .nav-link:hover, .nav-link:focus, .nav-link:active {
-    background: rgba(201,162,39,0.2) !important;
+  .nav-link:hover, .nav-link:active {
+    background: rgba(201,162,39,0.25) !important;
     color: var(--gold) !important;
     border-color: var(--gold) !important;
   }
   .nav-link.active {
-    background: linear-gradient(135deg, rgba(0,98,51,0.8), rgba(201,162,39,0.3)) !important;
+    background: linear-gradient(135deg, #006233, #004422) !important;
     color: var(--gold) !important;
     border-color: var(--gold) !important;
-    box-shadow: 0 4px 15px rgba(201,162,39,0.2) !important;
+    box-shadow: 0 4px 15px rgba(0,98,51,0.4) !important;
   }
 
-  /* ── طبقة الظلام (Overlay) ── */
+  /* ── خلفية التعتيم ── */
   .nav-overlay {
     display: none;
     position: fixed !important;
-    top: 0 !important;
-    left: 0 !important;
-    right: 0 !important;
-    bottom: 0 !important;
+    inset: 0 !important;
     width: 100vw !important;
     height: 100vh !important;
-    background: rgba(0,0,0,0.75) !important;
+    background: rgba(0,0,0,0.5) !important;
     z-index: 99990 !important;
+    cursor: pointer !important;
   }
   .nav-overlay.show {
     display: block !important;

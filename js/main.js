@@ -49,6 +49,16 @@ function initHamburger() {
     document.body.appendChild(overlay);
   }
 
+  function toggleMenu(e) {
+    if (e) e.stopPropagation();
+    const isOpen = navLinks.classList.contains('open');
+    if (isOpen) {
+      closeMenu();
+    } else {
+      openMenu();
+    }
+  }
+
   function openMenu() {
     hamburger.classList.add('active');
     navLinks.classList.add('open');
@@ -63,12 +73,15 @@ function initHamburger() {
     document.body.style.overflow = '';
   }
 
-  hamburger.addEventListener('click', () => {
-    if (navLinks.classList.contains('open')) { closeMenu(); } else { openMenu(); }
-  });
+  hamburger.onclick = toggleMenu;
+  overlay.onclick = closeMenu;
 
-  // إغلاق عند الضغط على الـ overlay
-  overlay.addEventListener('click', closeMenu);
+  // إغلاق عند اختيار أي رابط
+  navLinks.querySelectorAll('.nav-link').forEach(link => {
+    link.onclick = () => {
+      closeMenu();
+    };
+  });
 
   // إغلاق بضغط Escape
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeMenu(); });

@@ -548,89 +548,70 @@ input, textarea, select { font-family: var(--font); }
   .logo-sub { display: none !important; }
   .logo-name { font-size: 15px !important; font-weight: 700 !important; }
 
-  /* ── القائمة الجانبية المحدثة ── */
+  /* ── القائمة الجانبية الفاخرة والمضيئة ── */
   .nav-links {
     position: fixed !important;
     top: 0 !important;
     right: 0 !important;
     bottom: 0 !important;
-    width: 280px !important;
+    width: 290px !important;
     max-width: 85vw !important;
-    height: 100% !important;
     height: 100vh !important;
     height: 100dvh !important;
-    background: #111a2e !important;
-    box-shadow: -15px 0 50px rgba(0,0,0,0.95) !important;
+    background: #0f172a !important; /* لون سماء الليل المضيء والواضح */
+    box-shadow: -15px 0 50px rgba(0, 0, 0, 0.9) !important;
     display: flex !important;
     flex-direction: column !important;
     align-items: stretch !important;
     padding: 85px 16px 30px !important;
-    gap: 8px !important;
-    border-left: 2px solid var(--gold) !important;
-    z-index: 100005 !important;
+    gap: 12px !important;
+    border-left: 3px solid var(--gold) !important;
+    z-index: 999999 !important;
     overflow-y: auto !important;
-    visibility: hidden !important;
-    opacity: 0 !important;
-    transform: translateX(100%) !important;
-    transition: transform 0.28s ease, opacity 0.28s ease, visibility 0.28s ease !important;
+    transform: translateX(105%) !important;
+    transition: transform 0.25s ease-out !important;
   }
   .nav-links.open {
-    visibility: visible !important;
-    opacity: 1 !important;
     transform: translateX(0) !important;
   }
 
-  /* روابط الشريط الجانبي واضحة جداً بأزرار مميزة */
+  /* بطاقات روابط القائمة واضحة ومضيئة جداً */
   .nav-links li {
     width: 100% !important;
-    margin: 3px 0 !important;
+    margin: 0 !important;
     list-style: none !important;
-    position: relative !important;
-    z-index: 100010 !important;
   }
   .nav-link {
     display: block !important;
-    padding: 14px 20px !important;
+    padding: 15px 20px !important;
     width: 100% !important;
-    font-size: 16px !important;
-    font-weight: 700 !important;
+    font-size: 17px !important;
+    font-weight: 800 !important;
     color: #ffffff !important;
-    background: #1e293b !important;
-    border: 1px solid rgba(201,162,39,0.3) !important;
-    border-radius: 10px !important;
-    transition: all 0.2s ease !important;
+    background: #1e293b !important; /* لون بطاقة بارز وفاتح */
+    border: 1.5px solid rgba(201, 162, 39, 0.5) !important;
+    border-radius: 12px !important;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3) !important;
+    transition: all 0.15s ease !important;
     cursor: pointer !important;
     text-decoration: none !important;
-    pointer-events: auto !important;
-    position: relative !important;
-    z-index: 100015 !important;
-    box-sizing: border-box !important;
+    text-align: right !important;
   }
   .nav-link:hover, .nav-link:active {
     background: rgba(201,162,39,0.3) !important;
-    color: var(--gold) !important;
-    border-color: var(--gold) !important;
+    color: #ffd700 !important;
+    border-color: #ffd700 !important;
   }
   .nav-link.active {
     background: linear-gradient(135deg, #006233, #004422) !important;
     color: #ffd700 !important;
-    border-color: var(--gold) !important;
-    box-shadow: 0 4px 15px rgba(0,98,51,0.5) !important;
+    border-color: #ffd700 !important;
+    box-shadow: 0 4px 15px rgba(0,98,51,0.6) !important;
   }
 
-  /* ── خلفية التعتيم ── */
+  /* ── إيقاف التعتيم المظلم لمنع أي حجب ── */
   .nav-overlay {
-    display: none;
-    position: fixed !important;
-    inset: 0 !important;
-    width: 100vw !important;
-    height: 100vh !important;
-    background: rgba(0,0,0,0.6) !important;
-    z-index: 100000 !important;
-    cursor: pointer !important;
-  }
-  .nav-overlay.show {
-    display: block !important;
+    display: none !important;
   }
 
   /* إجبار كل العناصر على التوسيط وعدم الخروج عن الشاشة */

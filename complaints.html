@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>بوابة الشكاوى والاقتراحات | النائب الأستاذ مراد لعيداني</title>
+  <meta name="description" content="الموقع الرسمي للنائب مراد لعيداني — قدم شكواك أو اقتراحك وتابع حالة طلبك برقم مرجعي فوري.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/complaints.css">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+</head>
+<body>
+
+<div id="loader" class="loader">
+  <div class="loader-inner">
+    <div class="loader-logo">
+      <svg viewBox="0 0 60 60" fill="none"><circle cx="30" cy="30" r="28" stroke="#C9A227" stroke-width="2"/><path d="M15 30 Q30 10 45 30 Q30 50 15 30Z" fill="#006233"/><circle cx="30" cy="30" r="5" fill="#C9A227"/></svg>
+    </div>
+    <div class="loader-bar"><div class="loader-fill"></div></div>
+  </div>
+</div>
+
+<nav class="navbar scrolled" id="navbar">
+  <div class="nav-container">
+    <a href="index.html" class="nav-logo">
+          <div class="logo-icon" style="overflow:hidden;border-radius:50%;border:2px solid var(--gold);width:36px;height:36px;flex-shrink:0;">
+            <img src="assets/apn-logo.jpg" alt="شعار المجلس الشعبي الوطني" style="width:100%;height:100%;object-fit:cover;" onerror="this.src='10.jpg'">
+          </div>
+          <div class="logo-text"><span class="logo-name">مراد لعيداني</span><span class="logo-sub">نائب ولاية مستغانم — المجلس الشعبي الوطني</span></div>
+        </a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html" class="nav-link">الرئيسية</a></li>
+      <li><a href="deputy.html" class="nav-link">النائب</a></li>
+      <li><a href="archive.html" class="nav-link">الأرشيف البرلماني</a></li>
+      <li><a href="news.html" class="nav-link">الأخبار</a></li>
+      <li><a href="complaints.html" class="nav-link active">الشكاوى</a></li>
+      <li><a href="media.html" class="nav-link">الوسائط</a></li>
+      <li><a href="contact.html" class="nav-link">التواصل</a></li>
+      <li><a href="admin.html" class="nav-link admin-link" style="display:none !important; visibility:hidden; pointer-events:none;">🔐 لوحة التحكم</a></li>
+    </ul>
+    <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<!-- Page Hero -->
+<div class="page-hero">
+  <div class="container page-hero-content">
+    <div class="page-breadcrumb">
+      <a href="index.html">الرئيسية</a>
+      <span>›</span>
+      <span>الشكاوى والاقتراحات</span>
+    </div>
+    <h1>📋 بوابة الشكاوى والاقتراحات</h1>
+    <p>صوتك يُسمع. قدّم شكواك أو اقتراحك وتابع حالة ملفك بشكل شفاف ومباشر.</p>
+  </div>
+</div>
+
+<main style="padding: 80px 0;">
+  <div class="container">
+
+    <!-- Tabs -->
+    <div class="tabs-bar" data-aos="fade-up">
+      <button class="tab-btn active" data-tab="submit">📝 تقديم طلب جديد</button>
+      <button class="tab-btn" data-tab="track" id="trackTabBtn">🔍 متابعة الطلب</button>
+      <button class="tab-btn" data-tab="suggest" id="suggestTabBtn">💡 اقتراح</button>
+    </div>
+
+    <!-- Tab: Submit -->
+    <div class="tab-content active" id="tab-submit" data-aos="fade-up">
+      <div class="form-card">
+        <div class="form-card-header">
+          <div class="fch-icon">📋</div>
+          <div>
+            <h2>تقديم شكوى جديدة</h2>
+            <p>سيتم منحك رقماً مرجعياً فور تقديم طلبك لمتابعته لاحقاً</p>
+          </div>
+        </div>
+
+        <form id="complaintForm" onsubmit="submitComplaint(event)">
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">الاسم الكامل *</label>
+              <input type="text" class="form-input" id="cName" placeholder="أدخل اسمك الكامل" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">رقم الهاتف</label>
+              <input type="tel" class="form-input" id="cPhone" placeholder="+213 XX XX XX XX">
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">البريد الإلكتروني</label>
+              <input type="email" class="form-input" id="cEmail" placeholder="example@email.com">
+            </div>
+            <div class="form-group">
+              <label class="form-label">الدائرة *</label>
+              <select class="form-select" id="cDaira" required onchange="updateCommunes()">
+                <option value="">— اختر الدائرة —</option>
+                <option value="دائرة سيدي لخضر">دائرة سيدي لخضر</option>
+                <option value="دائرة مستغانم">دائرة مستغانم</option>
+                <option value="دائرة حاسي مماش">دائرة حاسي مماش</option>
+                <option value="دائرة عين تادلس">دائرة عين تادلس</option>
+                <option value="دائرة عشعاشة">دائرة عشعاشة</option>
+                <option value="دائرة سيدي علي">دائرة سيدي علي</option>
+                <option value="دائرة بوقيرات">دائرة بوقيرات</option>
+                <option value="دائرة خير الدين">دائرة خير الدين</option>
+                <option value="دائرة ماسرى">دائرة ماسرى</option>
+                <option value="دائرة عين النويصي">دائرة عين النويصي</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">البلدية *</label>
+              <select class="form-select" id="cCommune" required>
+                <option value="">— اختر الدائرة أولاً —</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">العنوان بالتفصيل (الحي / الشارع / رقم السكن) *</label>
+              <input type="text" class="form-input" id="cAddress" placeholder="مثال: حي السلام، شارع 01، عمارة ب رقم 12" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">نوع الطلب *</label>
+            <select class="form-select" id="cType" required>
+              <option value="">— اختر نوع الطلب —</option>
+              <option value="infrastructure">بنية تحتية (طرق، ماء، غاز...)</option>
+              <option value="health">صحة (مستشفى، مراكز صحية...)</option>
+              <option value="education">تعليم (مدارس، جامعات...)</option>
+              <option value="housing">سكن (مشاريع سكنية، إيجار...)</option>
+              <option value="employment">تشغيل وعمل</option>
+              <option value="social">شؤون اجتماعية</option>
+              <option value="other">أخرى</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">موضوع الشكوى *</label>
+            <input type="text" class="form-input" id="cSubject" placeholder="اكتب موضوعاً مختصراً لطلبك" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">تفاصيل الشكوى *</label>
+            <textarea class="form-textarea" id="cDetails" placeholder="اشرح مشكلتك بالتفصيل... (المكان، التاريخ، الجهات المعنية...)" required style="min-height:180px;"></textarea>
+          </div>
+
+          <div class="form-check">
+            <input type="checkbox" id="cPrivacy" required>
+            <label for="cPrivacy">أقر بأن المعلومات المقدمة صحيحة وأوافق على معالجة بياناتي.</label>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn-primary" id="submitBtn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+              إرسال الشكوى
+            </button>
+          </div>
+        </form>
+
+        <!-- Success Message -->
+        <div id="submitSuccess" class="submit-success hidden">
+          <div class="success-icon">✅</div>
+          <h3>تم تقديم شكواك بنجاح!</h3>
+          <p>رقمك المرجعي هو:</p>
+          <div class="ref-number" id="refNumber">DZ-2026-00000</div>
+          <p class="ref-note">احتفظ بهذا الرقم لمتابعة حالة طلبك. يمكنك المتابعة من خلال تبويب <strong>"متابعة الطلب"</strong></p>
+          <button onclick="resetForm()" class="btn-outline" style="margin-top:16px;">تقديم شكوى جديدة</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab: Track -->
+    <div class="tab-content" id="tab-track" data-aos="fade-up">
+      <div class="form-card">
+        <div class="form-card-header">
+          <div class="fch-icon">🔍</div>
+          <div>
+            <h2>متابعة حالة طلبك</h2>
+            <p>أدخل الرقم المرجعي الذي استلمته عند تقديم الشكوى</p>
+          </div>
+        </div>
+
+        <div class="track-form">
+          <div class="track-input-large">
+            <input type="text" id="trackRefFull" class="form-input" placeholder="DZ-2026-XXXXX" style="direction:ltr;text-align:center;font-size:18px;letter-spacing:2px;">
+            <button onclick="trackFull()" class="btn-primary">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+              بحث
+            </button>
+          </div>
+          <div id="trackResultFull" class="track-result-full hidden"></div>
+        </div>
+
+        <!-- All user complaints -->
+        <div class="all-complaints-section">
+          <h3>آخر الطلبات المقدمة</h3>
+          <div id="recentComplaints" class="complaints-list"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab: Suggest -->
+    <div class="tab-content" id="tab-suggest" data-aos="fade-up">
+      <div class="form-card">
+        <div class="form-card-header">
+          <div class="fch-icon">💡</div>
+          <div>
+            <h2>تقديم اقتراح</h2>
+            <p>لديك فكرة أو مبادرة تخدم المنطقة؟ شاركنا بها</p>
+          </div>
+        </div>
+
+        <form id="suggestForm" onsubmit="submitSuggestion(event)">
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">الاسم (اختياري)</label>
+              <input type="text" class="form-input" id="sName" placeholder="يمكنك البقاء مجهولاً">
+            </div>
+            <div class="form-group">
+              <label class="form-label">مجال الاقتراح *</label>
+              <select class="form-select" id="sCategory" required>
+                <option value="">— اختر المجال —</option>
+                <option value="التنمية المحلية">التنمية المحلية</option>
+                <option value="التعليم">التعليم</option>
+                <option value="الصحة">الصحة</option>
+                <option value="الاقتصاد">الاقتصاد والتشغيل</option>
+                <option value="البيئة">البيئة</option>
+                <option value="الثقافة">الثقافة والرياضة</option>
+                <option value="أخرى">أخرى</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">عنوان الاقتراح *</label>
+            <input type="text" class="form-input" id="sTitle" placeholder="اكتب عنواناً واضحاً لاقتراحك" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">تفاصيل الاقتراح *</label>
+            <textarea class="form-textarea" id="sDetails" placeholder="اشرح اقتراحك بالتفصيل... كيف يمكن تطبيقه؟ ما هي الفوائد المتوقعة؟" required style="min-height:180px;"></textarea>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn-primary">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+              إرسال الاقتراح
+            </button>
+          </div>
+        </form>
+        <div id="suggestSuccess" class="submit-success hidden">
+          <div class="success-icon">💡</div>
+          <h3>شكراً على اقتراحك!</h3>
+          <p>تم استلام اقتراحك وسيتم دراسته والنظر فيه من قِبل فريق النائب.</p>
+          <button onclick="resetSuggestForm()" class="btn-outline" style="margin-top:16px;">تقديم اقتراح آخر</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Info Cards -->
+    <div class="info-cards-row" data-aos="fade-up">
+      <div class="info-card">
+        <div class="ic-icon">⏱️</div>
+        <h4>مدة المعالجة</h4>
+        <p>يُعالج طلبك خلال <strong>5-10 أيام عمل</strong> من تاريخ التقديم</p>
+      </div>
+      <div class="info-card">
+        <div class="ic-icon">🔒</div>
+        <h4>سرية المعلومات</h4>
+        <p>معلوماتك الشخصية محمية ولن تُشارك مع أي جهة خارجية</p>
+      </div>
+      <div class="info-card">
+        <div class="ic-icon">📱</div>
+        <h4>المتابعة اللحظية</h4>
+        <p>تابع حالة طلبك في أي وقت باستخدام الرقم المرجعي</p>
+      </div>
+      <div class="info-card">
+        <div class="ic-icon">🤝</div>
+        <h4>استجابة مضمونة</h4>
+        <p>نلتزم بالرد على كل طلب والتواصل مع صاحبه</p>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="nav-logo">
+          <div class="logo-icon"><svg viewBox="0 0 40 40" fill="none"><circle cx="20" cy="20" r="18" stroke="#C9A227" stroke-width="1.5"/><path d="M8 20 Q20 5 32 20 Q20 35 8 20Z" fill="#006233"/><circle cx="20" cy="20" r="4" fill="#C9A227"/></svg></div>
+          <div class="logo-text"><span class="logo-name">النائب البرلماني</span><span class="logo-sub">الموقع الرسمي</span></div>
+        </div>
+        <p>الموقع الرسمي للنائب البرلماني — في خدمة المواطن والوطن منذ 2026</p>
+      </div>
+      <div class="footer-links">
+        <h4>روابط سريعة</h4>
+        <ul>
+          <li><a href="index.html">الرئيسية</a></li>
+          <li><a href="deputy.html">نبذة عن النائب</a></li>
+          <li><a href="archive.html">الأرشيف البرلماني</a></li>
+          <li><a href="news.html">الأخبار</a></li>
+        </ul>
+      </div>
+      <div class="footer-links">
+        <h4>خدمات المواطن</h4>
+        <ul>
+          <li><a href="complaints.html">تقديم شكوى</a></li>
+          <li><a href="complaints.html#track">متابعة الطلب</a></li>
+          <li><a href="contact.html">تواصل معنا</a></li>
+        </ul>
+      </div>
+      <div class="footer-contact">
+        <h4>معلومات التواصل</h4>
+        <div class="contact-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg><span id="footerAddress">مكتب النائب — الجزائر</span></div>
+        <div class="contact-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13.6a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 3h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 10.9a16 16 0 0 0 6 6l.93-.93a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 18.92"/></svg><span>+213 XX XX XX XX</span></div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 — الموقع الرسمي للنائب البرلماني. جميع الحقوق محفوظة.</p>
+      <p>صُمم وطُوِّر لخدمة المواطن الجزائري 🇩🇿</p>
+    </div>
+  </div>
+</footer>
+
+<script src="js/data.js"></script>
+<script src="js/main.js"></script>
+<script src="js/complaints.js"></script>
+</body>
+</html>
+
+

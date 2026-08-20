@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الأخبار والأنشطة | النائب الأستاذ مراد لعيداني</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/news.css">
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+</head>
+<body class="theme-dark">
+    <!-- Navbar -->
+    <nav class="navbar scrolled" id="navbar">
+      <div class="nav-container">
+        <a href="index.html" class="nav-logo">
+          <div class="logo-icon" style="overflow:hidden;border-radius:50%;border:2px solid var(--gold);width:36px;height:36px;flex-shrink:0;">
+            <img src="assets/apn-logo.jpg" alt="شعار المجلس الشعبي الوطني" style="width:100%;height:100%;object-fit:cover;" onerror="this.src='10.jpg'">
+          </div>
+          <div class="logo-text"><span class="logo-name">مراد لعيداني</span><span class="logo-sub">نائب ولاية مستغانم — المجلس الشعبي الوطني</span></div>
+        </a>
+        <ul class="nav-links" id="navLinks">
+          <li><a href="index.html" class="nav-link">الرئيسية</a></li>
+          <li><a href="deputy.html" class="nav-link">النائب</a></li>
+          <li><a href="archive.html" class="nav-link">الأرشيف البرلماني</a></li>
+          <li><a href="news.html" class="nav-link active">الأخبار</a></li>
+          <li><a href="complaints.html" class="nav-link">الشكاوى</a></li>
+          <li><a href="media.html" class="nav-link">الوسائط</a></li>
+          <li><a href="contact.html" class="nav-link">التواصل</a></li>
+          <li><a href="admin.html" class="nav-link admin-link" style="display:none !important; visibility:hidden; pointer-events:none;">🔐 لوحة التحكم</a></li>
+        </ul>
+        <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+      </div>
+    </nav>
+
+    <!-- Page Hero -->
+    <header class="page-hero">
+        <div class="container">
+            <h1 class="hero-title">الأخبار والمستجدات</h1>
+            <p class="hero-subtitle">آخر أخبار ونشاطات النائب البرلماني في الدائرة الانتخابية والمجلس</p>
+        </div>
+    </header>
+
+    <main class="main-content container">
+        <!-- Filter & Search -->
+        <div class="news-controls">
+            <div class="category-pills" id="newsCategories">
+                <button class="pill active" data-category="all">الكل</button>
+                <button class="pill" data-category="برلمان">جلسات البرلمان</button>
+                <button class="pill" data-category="ميداني">خرجات ميدانية</button>
+                <button class="pill" data-category="صحة">قطاع الصحة</button>
+                <button class="pill" data-category="اقتصاد">الاقتصاد والاستثمار</button>
+                <button class="pill" data-category="فلاحة">الفلاحة والري</button>
+                <button class="pill" data-category="وطني">مناسبات وطنية</button>
+            </div>
+            <div class="search-box-wrapper" style="margin-top: 1.5rem; width: 100%; max-width: 480px; position: relative;">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="var(--gold)" stroke-width="2" style="position: absolute; right: 18px; top: 50%; transform: translateY(-50%); pointer-events: none;"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                <input type="text" id="newsSearch" class="form-input" placeholder="ابحث في الأخبار والبيانات الرسمية والأنشطة النيابية..." style="width:100%; background:rgba(255,255,255,0.04); border:1.5px solid rgba(201,162,39,0.3); border-radius:30px; padding:12px 48px 12px 20px; color:#fff; font-size:14px; outline:none; transition:all 0.3s ease;">
+            </div>
+        </div>
+
+        <!-- News Grid -->
+        <div class="news-grid" id="newsGrid">
+            <!-- Rendered by JS -->
+        </div>
+        
+        <div class="load-more-container">
+            <button class="btn btn-outline" id="loadMoreBtn">تحميل المزيد</button>
+        </div>
+    </main>
+
+    <!-- Article Modal -->
+    <div class="modal-overlay hidden" id="articleModal">
+        <div class="modal-content">
+            <button class="modal-close" id="closeModal">&times;</button>
+            <div class="modal-header">
+                <span class="modal-category" id="modalCategory">فئة</span>
+                <span class="modal-date" id="modalDate">التاريخ</span>
+            </div>
+            <h2 class="modal-title" id="modalTitle">عنوان المقال</h2>
+            <div class="modal-body" id="modalBody">
+                <!-- Content injected here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-grid">
+          <div class="footer-brand">
+            <div class="nav-logo" style="display:flex;align-items:center;gap:12px;margin-bottom:14px;">
+                <div class="logo-icon" style="overflow:hidden;border-radius:50%;border:2px solid var(--gold);width:36px;height:36px;flex-shrink:0;">
+                  <img src="assets/apn-logo.jpg" alt="شعار المجلس الشعبي الوطني" style="width:100%;height:100%;object-fit:cover;" onerror="this.src='10.jpg'">
+                </div>
+                <div class="logo-text"><span class="logo-name" style="font-weight:700;color:#fff;">مراد لعيداني</span><span class="logo-sub" style="font-size:11px;color:var(--gold);">المجلس الشعبي الوطني — ولاية مستغانم</span></div>
+            </div>
+            <p style="color:#94a3b8;font-size:14px;">الموقع الرسمي للنائب البرلماني الأستاذ مراد لعيداني — في خدمة المواطن والوطن 2026 - 2031</p>
+          </div>
+          <div class="footer-links"><h4>روابط سريعة</h4><ul><li><a href="index.html">الرئيسية</a></li><li><a href="deputy.html">النائب</a></li><li><a href="archive.html">الأرشيف البرلماني</a></li><li><a href="news.html">الأخبار</a></li></ul></div>
+          <div class="footer-links"><h4>خدمات المواطن</h4><ul><li><a href="complaints.html">تقديم شكوى</a></li><li><a href="contact.html">تواصل معنا</a></li></ul></div>
+          <div class="footer-contact"><h4>تواصل</h4>
+            <div class="contact-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07"/></svg><span>+213 (0) 45 40 20 26</span></div>
+            <div class="contact-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/></svg><span>LAIDANI.MOURAD@GMAIL.COM</span></div>
+          </div>
+        </div>
+        <div class="footer-bottom"><p>© 2026 — الموقع الرسمي للنائب البرلماني الأستاذ مراد لعيداني — ولاية مستغانم 🇩🇿</p></div>
+      </div>
+    </footer>
+
+    <script src="js/data.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/news.js"></script>
+</body>
+</html>
+
+

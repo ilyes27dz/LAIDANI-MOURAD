@@ -1,0 +1,383 @@
+﻿<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة التحكم البرلمانية | النائب مراد لعيداني</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/admin.css">
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+</head>
+<body class="theme-dark">
+    <!-- Navbar -->
+    <nav class="navbar scrolled" id="navbar">
+      <div class="nav-container">
+        <a href="index.html" class="nav-logo">
+          <div class="logo-icon" style="overflow:hidden;border-radius:50%;border:2px solid var(--gold);width:36px;height:36px;flex-shrink:0;">
+            <img src="assets/apn-logo.jpg" alt="شعار المجلس الشعبي الوطني" style="width:100%;height:100%;object-fit:cover;" onerror="this.src='10.jpg'">
+          </div>
+          <div class="logo-text"><span class="logo-name">مراد لعيداني</span><span class="logo-sub">نائب ولاية مستغانم — المجلس الشعبي الوطني</span></div>
+        </a>
+        <ul class="nav-links" id="navLinks">
+          <li><a href="index.html" class="nav-link">الرئيسية</a></li>
+          <li><a href="deputy.html" class="nav-link">النائب</a></li>
+          <li><a href="archive.html" class="nav-link">الأرشيف البرلماني</a></li>
+          <li><a href="news.html" class="nav-link">الأخبار</a></li>
+          <li><a href="complaints.html" class="nav-link">الشكاوى</a></li>
+          <li><a href="media.html" class="nav-link">الوسائط</a></li>
+          <li><a href="contact.html" class="nav-link">التواصل</a></li>
+          <li><a href="admin.html" class="nav-link active admin-link">🔐 لوحة التحكم</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <!-- Login Section -->
+    <div id="loginSection" class="admin-login-container">
+        <div class="login-card glass-panel">
+            <div class="login-header text-center">
+                <div class="login-icon">🔐</div>
+                <h2>بوابة إدارة المكتب البرلماني</h2>
+                <p>مخصصة لفريق عمل النائب والمشرفين</p>
+            </div>
+            <form id="loginForm">
+                <div class="form-group mb-2">
+                    <label>كلمة المرور الإدارية</label>
+                    <input type="password" id="adminPassword" class="form-control" required placeholder="أدخل كلمة المرور (افتراضي: deputy2026)">
+                </div>
+                <button type="submit" class="btn btn-primary w-100">تسجيل الدخول</button>
+                <div id="loginError" class="login-error text-center mt-1" style="display: none;">❌ كلمة المرور غير صحيحة، يرجى المحاولة مجدداً.</div>
+            </form>
+            <div class="login-tip text-center mt-2">
+                <small>كلمة المرور الافتراضية للتجربة: <code>deputy2026</code> أو <code>admin</code></small>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dashboard Section -->
+    <div id="dashboardSection" class="dashboard-container" style="display: none;">
+        <div class="container">
+            <!-- Header -->
+            <div class="dashboard-header d-flex justify-content-between align-items-center mb-3">
+                <div>
+                    <h1>لوحة القيادة والإدارة البرلمانية</h1>
+                    <p class="text-muted">متابعة انشغالات المواطنين، نشر الأخبار، وتوثيق النشاط التشريعي</p>
+                </div>
+                <div class="header-actions">
+                    <a href="index.html" class="btn btn-outline" target="_blank">🌐 معاينة الموقع</a>
+                    <button id="logoutBtn" class="btn btn-danger">تسجيل الخروج 🚪</button>
+                </div>
+            </div>
+
+            <!-- Stats Bar -->
+            <div class="stats-row mb-3">
+                <div class="stat-card">
+                    <div class="stat-icon">📋</div>
+                    <div class="stat-title">إجمالي الشكاوى</div>
+                    <div class="stat-value" id="statTotalComplaints">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">📩</div>
+                    <div class="stat-title">شكاوى جديدة</div>
+                    <div class="stat-value text-gold" id="statNewComplaints">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">⏳</div>
+                    <div class="stat-title">قيد المتابعة والمساءلة</div>
+                    <div class="stat-value text-blue" id="statPendingComplaints">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">✅</div>
+                    <div class="stat-title">تمت المعالجة والرد</div>
+                    <div class="stat-value text-green" id="statResolvedComplaints">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">💬</div>
+                    <div class="stat-title">رسائل التواصل</div>
+                    <div class="stat-value" id="statNewMessages">0</div>
+                </div>
+            </div>
+
+            <!-- Main Tabs -->
+            <div class="admin-tabs mb-2">
+                <button class="admin-tab active" data-target="tab-complaints">📋 إدارة الشكاوى والمقترحات</button>
+                <button class="admin-tab" data-target="tab-messages">💬 صندوق الرسائل (<span id="unreadCountBadge">0</span>)</button>
+                <button class="admin-tab" data-target="tab-news">📰 إدارة الأخبار والأنشطة</button>
+                <button class="admin-tab" data-target="tab-archive">🏛️ الأرشيف البرلماني والأسئلة</button>
+                <button class="admin-tab" data-target="tab-settings">⚙️ الملف الشخصي والإعدادات</button>
+            </div>
+
+            <div class="tab-content-area glass-panel">
+                <!-- ================= TAB 1: COMPLAINTS ================= -->
+                <div id="tab-complaints" class="tab-pane active">
+                    <div class="tab-header-flex mb-2">
+                        <div>
+                            <h2>إدارة ومتابعة انشغالات المواطنين</h2>
+                            <p class="text-muted">الاطلاع على الشكاوى، تحديث الحالة، وتدوين الردود الرسمية المباشرة</p>
+                        </div>
+                        <div class="tab-controls-group">
+                            <input type="text" id="adminComplaintSearch" class="form-control form-control-sm" placeholder="🔍 ابحث بالاسم، الرقم المرجعي...">
+                            <select id="adminComplaintFilter" class="form-control form-control-sm">
+                                <option value="all">جميع الحالات</option>
+                                <option value="new">طلبات جديدة</option>
+                                <option value="pending">قيد المعالجة</option>
+                                <option value="resolved">تم الرد</option>
+                            </select>
+                            <button id="exportCsvBtn" class="btn btn-sm btn-outline">📥 تصدير CSV</button>
+                        </div>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>الرقم المرجعي</th>
+                                    <th>التاريخ</th>
+                                    <th>المواطن</th>
+                                    <th>البلدية / الدائرة</th>
+                                    <th>الموضوع</th>
+                                    <th>القطاع</th>
+                                    <th>الحالة</th>
+                                    <th>الإجراءات</th>
+                                </tr>
+                            </thead>
+                            <tbody id="adminComplaintsList">
+                                <!-- Populated dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- ================= TAB 2: MESSAGES ================= -->
+                <div id="tab-messages" class="tab-pane">
+                    <div class="tab-header-flex mb-2">
+                        <div>
+                            <h2>صندوق الرسائل والتواصل المباشر</h2>
+                            <p class="text-muted">الرسائل وطلبات المواعيد الواردة من صفحة التواصل</p>
+                        </div>
+                    </div>
+                    <div class="messages-list" id="adminMessagesList">
+                        <!-- Populated dynamically -->
+                    </div>
+                </div>
+
+                <!-- ================= TAB 3: NEWS ================= -->
+                <div id="tab-news" class="tab-pane">
+                    <div class="grid-2-col">
+                        <!-- Add News Form -->
+                        <div class="card-inner">
+                            <h3>➕ نشر خبر / نشاط جديد</h3>
+                            <form id="addNewsForm" class="admin-form mt-2">
+                                <div class="form-group mb-1">
+                                    <label>عنوان الخبر *</label>
+                                    <input type="text" id="newsTitle" class="form-control" required placeholder="مثال: النائب يطالب بتسريع مشاريع التنمية">
+                                </div>
+                                <div class="form-row-2 mb-1">
+                                    <div class="form-group">
+                                        <label>التصنيف *</label>
+                                        <select id="newsCategory" class="form-control" required>
+                                            <option value="برلمان">جلسات البرلمان</option>
+                                            <option value="ميداني">خرجات ميدانية</option>
+                                            <option value="صحة">قطاع الصحة</option>
+                                            <option value="سكن">السكن والتهيئة</option>
+                                            <option value="اقتصاد">الاقتصاد والاستثمار</option>
+                                            <option value="فلاحة">الفلاحة والري</option>
+                                            <option value="وطني">مناسبات وطنية</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>تاريخ الخبر</label>
+                                        <input type="date" id="newsDate" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="form-group mb-1">
+                                    <label>مقتطف قصير (الموجز) *</label>
+                                    <textarea id="newsExcerpt" class="form-control" rows="2" required placeholder="ملخص يظهر في البطاقات الرئيسية..."></textarea>
+                                </div>
+                                <div class="form-group mb-1">
+                                    <label>نص الخبر الكامل *</label>
+                                    <textarea id="newsContent" class="form-control" rows="5" required placeholder="التفاصيل الكاملة للخبر أو التصريح..."></textarea>
+                                </div>
+                                <div class="form-row-2 mb-2">
+                                    <div class="form-group">
+                                        <label>رمز الإيموجي</label>
+                                        <input type="text" id="newsIcon" class="form-control" placeholder="🏛️" value="🏛️">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>لون الغلاف (تدرج)</label>
+                                        <select id="newsColor" class="form-control">
+                                            <option value="linear-gradient(135deg, #006233, #004422)">أخضر وطني</option>
+                                            <option value="linear-gradient(135deg, #C9A227, #f0c040)">ذهبي برلماني</option>
+                                            <option value="linear-gradient(135deg, #1a3a6b, #2563eb)">أزرق مؤسساتي</option>
+                                            <option value="linear-gradient(135deg, #dc2626, #ef4444)">أحمر عنابي</option>
+                                            <option value="linear-gradient(135deg, #7c3aed, #a855f7)">بنفسجي</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-primary w-100">نشر الخبر في الموقع</button>
+                            </form>
+                        </div>
+
+                        <!-- Published News List -->
+                        <div class="card-inner">
+                            <h3>📑 الأخبار المنشورة بالموقع</h3>
+                            <div class="admin-items-list mt-2" id="adminNewsList">
+                                <!-- Populated dynamically -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ================= TAB 4: ARCHIVE ================= -->
+                <div id="tab-archive" class="tab-pane">
+                    <div class="grid-2-col">
+                        <!-- Add Archive Form -->
+                        <div class="card-inner">
+                            <h3>➕ توثيق نشاط برلماني في الأرشيف</h3>
+                            <form id="addArchiveForm" class="admin-form mt-2">
+                                <div class="form-group mb-1">
+                                    <label>نوع النشاط *</label>
+                                    <select id="archiveType" class="form-control" required>
+                                        <option value="question">سؤال برلماني (شفوي / كتابي)</option>
+                                        <option value="law">مقترح قانون أو تعديل تشريعي</option>
+                                        <option value="session">مداخلة في جلسة علنية</option>
+                                        <option value="statement">بيان أو تصريح رسمي</option>
+                                    </select>
+                                </div>
+                                <div class="form-group mb-1">
+                                    <label>عنوان النشاط *</label>
+                                    <input type="text" id="archiveTitle" class="form-control" required placeholder="مثال: سؤال كتابي لوزير الري حول الماء الشروب">
+                                </div>
+                                <div class="form-row-2 mb-1">
+                                    <div class="form-group">
+                                        <label>رقم المرجع الرسمي (اختياري)</label>
+                                        <input type="text" id="archiveRefNo" class="form-control" placeholder="APN-Q-2026-...">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>الجهة الموجه إليها</label>
+                                        <input type="text" id="archiveMinistry" class="form-control" placeholder="وزارة الأشغال العمومية...">
+                                    </div>
+                                </div>
+                                <div class="form-group mb-1">
+                                    <label>الملخص ومضمون النشاط *</label>
+                                    <textarea id="archiveSummary" class="form-control" rows="4" required placeholder="شرح موجز لأهم ما جاء في المداخلة أو السؤال..."></textarea>
+                                </div>
+                                <div class="form-row-2 mb-2">
+                                    <div class="form-group">
+                                        <label>الكلمات الدلالية (مفصولة بفواصل)</label>
+                                        <input type="text" id="archiveTags" class="form-control" placeholder="سكن, صحة, تنمية">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>التاريخ</label>
+                                        <input type="date" id="archiveDate" class="form-control">
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-primary w-100">إضافة للأرشيف البرلماني</button>
+                            </form>
+                        </div>
+
+                        <!-- Archive Records List -->
+                        <div class="card-inner">
+                            <h3>🏛️ السجلات البرلمانية الحالية</h3>
+                            <div class="admin-items-list mt-2" id="adminArchiveList">
+                                <!-- Populated dynamically -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ================= TAB 5: SETTINGS ================= -->
+                <div id="tab-settings" class="tab-pane">
+                    <h2>إعدادات الهوية والملف التعريفي للنائب</h2>
+                    <p class="text-muted">أي تعديل هنا يتم حفظه وينعكس فورياً على جميع صفحات الموقع</p>
+                    
+                    <form id="updateDeputyForm" class="admin-form mt-2">
+                        <div class="form-row-2 mb-1">
+                            <div class="form-group">
+                                <label>الاسم الكامل مع اللقب *</label>
+                                <input type="text" id="deputyName" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label>الاسم المختصر *</label>
+                                <input type="text" id="deputyNameShort" class="form-control" required>
+                            </div>
+                        </div>
+
+                        <div class="form-row-2 mb-1">
+                            <div class="form-group">
+                                <label>الصفة البرلمانية</label>
+                                <input type="text" id="deputyTitle" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label>الدائرة الانتخابية / الولاية *</label>
+                                <input type="text" id="deputyRegion" class="form-control" required>
+                            </div>
+                        </div>
+
+                        <div class="form-row-2 mb-1">
+                            <div class="form-group">
+                                <label>العهدة التشريعية</label>
+                                <input type="text" id="deputyMandate" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label>الهيئة النيابية</label>
+                                <input type="text" id="deputyParty" class="form-control">
+                            </div>
+                        </div>
+
+                        <div class="form-group mb-1">
+                            <label>السيرة الذاتية ونبذة عن المسار</label>
+                            <textarea id="deputyBio" class="form-control" rows="4"></textarea>
+                        </div>
+
+                        <div class="form-row-2 mb-1">
+                            <div class="form-group">
+                                <label>البريد الإلكتروني الرسمي</label>
+                                <input type="email" id="deputyEmail" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label>رقم الهاتف / الفاكس</label>
+                                <input type="text" id="deputyPhone" class="form-control">
+                            </div>
+                        </div>
+
+                        <div class="form-group mb-2">
+                            <label>عنوان المداومة / المكتب البرلماني</label>
+                            <input type="text" id="deputyOffice" class="form-control">
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">💾 حفظ وتحديث البيانات في الموقع</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= COMPLAINT DETAILS & REPLY MODAL ================= -->
+    <div id="complaintModal" class="admin-modal" style="display: none;">
+        <div class="modal-overlay"></div>
+        <div class="modal-card glass-panel">
+            <div class="modal-header d-flex justify-content-between align-items-center">
+                <h3 id="modalComplaintTitle">تفاصيل الشكوى: <span id="modalComplaintId"></span></h3>
+                <button class="modal-close-btn" onclick="closeComplaintModal()">&times;</button>
+            </div>
+            <div class="modal-body" id="modalComplaintBody">
+                <!-- Dynamically filled -->
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container text-center">
+            <p>© 2026 الموقع الرسمي للنائب البرلماني الأستاذ مراد لعيداني. جميع الحقوق محفوظة.</p>
+        </div>
+    </footer>
+
+    <script src="js/data.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/admin.js"></script>
+</body>
+</html>
+
+

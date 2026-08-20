@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>النائب البرلماني الأستاذ مراد لعيداني | الموقع الرسمي</title>
+  <meta name="description" content="الموقع الرسمي للنائب البرلماني الأستاذ مراد لعيداني - المجلس الشعبي الوطني - في خدمة المواطن والوطن. متابعة الشكاوى، الأرشيف التشريعي، والأخبار.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/home.css">
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+</head>
+<body>
+
+<!-- Loader -->
+<div id="loader" class="loader">
+  <div class="loader-inner">
+    <div class="loader-logo">
+      <svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="30" cy="30" r="28" stroke="#C9A227" stroke-width="2"/>
+        <path d="M15 30 Q30 10 45 30 Q30 50 15 30Z" fill="#006233"/>
+        <circle cx="30" cy="30" r="5" fill="#C9A227"/>
+      </svg>
+    </div>
+    <div class="loader-bar"><div class="loader-fill"></div></div>
+  </div>
+</div>
+
+<!-- Navigation -->
+<nav class="navbar" id="navbar">
+  <div class="nav-container">
+    <a href="index.html" class="nav-logo">
+      <div class="logo-icon" style="overflow:hidden;border-radius:50%;border:2px solid var(--gold);width:36px;height:36px;flex-shrink:0;">
+        <img src="assets/apn-logo.jpg" alt="شعار المجلس الشعبي الوطني" style="width:100%;height:100%;object-fit:cover;" onerror="this.src='10.jpg'">
+      </div>
+      <div class="logo-text">
+        <span class="logo-name">مراد لعيداني</span>
+        <span class="logo-sub">نائب ولاية مستغانم — المجلس الشعبي الوطني</span>
+      </div>
+    </a>
+
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html" class="nav-link active">الرئيسية</a></li>
+      <li><a href="deputy.html" class="nav-link">النائب</a></li>
+      <li><a href="archive.html" class="nav-link">الأرشيف البرلماني</a></li>
+      <li><a href="news.html" class="nav-link">الأخبار</a></li>
+      <li><a href="complaints.html" class="nav-link">الشكاوى</a></li>
+      <li><a href="media.html" class="nav-link">الوسائط</a></li>
+      <li><a href="contact.html" class="nav-link">التواصل</a></li>
+      <li><a href="admin.html" class="nav-link admin-link" style="display:none !important; visibility:hidden; pointer-events:none;">🔐 لوحة التحكم</a></li>
+    </ul>
+
+    <button class="hamburger" id="hamburger" aria-label="القائمة">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- Hero Section -->
+<section class="hero" id="hero">
+  <div class="hero-bg">
+    <div class="hero-particles" id="particles"></div>
+    <div class="hero-overlay"></div>
+  </div>
+
+  <div class="hero-content">
+    <div class="hero-text" data-aos="fade-right">
+      <div class="hero-badge">
+        <span class="badge-dot"></span>
+        نائب برلماني — الجمهورية الجزائرية الديمقراطية الشعبية
+      </div>
+      <h1 class="hero-title">
+        <span class="title-name" id="deputyNameHero">الأستاذ مراد لعيداني</span>
+        <span class="title-sub">في خدمة المواطن والوطن</span>
+      </h1>
+      <p class="hero-desc">
+        نائب دائرة <strong id="deputyRegionHero">سيدي لخضر — ولاية مستغانم</strong> في المجلس الشعبي الوطني — محامٍ سابقاً يعمل بإخلاص وتفانٍ للدفاع عن حقوق المواطنين، حل الانشغالات، ودفع عجلة التنمية في كافة بلديات الولاية.
+      </p>
+      <div class="hero-actions">
+        <a href="complaints.html" class="btn-primary">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          أرسل شكوى أو اقتراح
+        </a>
+        <a href="deputy.html" class="btn-secondary">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M20 21a8 8 0 10-16 0"/></svg>
+          تعرف على النائب
+        </a>
+      </div>
+    </div>
+
+    <div class="hero-image" data-aos="fade-left">
+      <div class="deputy-card">
+        <div class="deputy-photo-wrap">
+          <div class="deputy-photo-container">
+            <img src="assets/deputy.jpg" alt="الأستاذ مراد لعيداني" class="deputy-photo-img" onerror="this.src='09.jpg'">
+          </div>
+          <!-- Official Algerian Flag -->
+          <div class="deputy-flag" title="الجمهورية الجزائرية الديمقراطية الشعبية 🇩🇿">
+            <svg viewBox="0 0 900 600" width="100%" height="100%">
+              <rect width="450" height="600" fill="#006233"/>
+              <rect x="450" width="450" height="600" fill="#ffffff"/>
+              <circle cx="450" cy="300" r="150" fill="#d21034"/>
+              <circle cx="485" cy="300" r="120" fill="#ffffff"/>
+              <polygon points="450,225 470,285 530,285 480,320 500,380 450,345 400,380 420,320 370,285 430,285" fill="#d21034"/>
+            </svg>
+          </div>
+          <!-- Official APN Logo Badge -->
+          <div class="apn-badge" title="المجلس الشعبي الوطني الجزائري">
+            <img src="assets/apn-logo.jpg" alt="شعار المجلس الشعبي الوطني" onerror="this.src='10.jpg'">
+          </div>
+        </div>
+        <div class="deputy-card-info">
+          <h3 id="deputyNameCard">مراد لعيداني</h3>
+          <p>نائب برلماني (محامٍ سابقاً) — <span id="deputyRegionCard">سيدي لخضر، ولاية مستغانم</span></p>
+          <div class="card-badges">
+            <span class="cbadge green">🏛️ المجلس الشعبي الوطني</span>
+            <span class="cbadge gold">⭐ الفترة التشريعية 2026 - 2031</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-scroll">
+    <div class="scroll-indicator">
+      <span>اكتشف أكثر</span>
+      <div class="scroll-arrow"></div>
+    </div>
+  </div>
+</section>
+
+<!-- Stats Section -->
+<section class="stats-section" id="stats">
+  <div class="container">
+    <div class="stats-grid">
+      <div class="stat-card" data-aos="zoom-in" data-delay="0">
+        <div class="stat-icon">📋</div>
+        <div class="stat-number" data-target="247">0</div>
+        <div class="stat-label">ملف معالج</div>
+      </div>
+      <div class="stat-card" data-aos="zoom-in" data-delay="100">
+        <div class="stat-icon">🏛️</div>
+        <div class="stat-number" data-target="89">0</div>
+        <div class="stat-label">جلسة برلمانية</div>
+      </div>
+      <div class="stat-card" data-aos="zoom-in" data-delay="200">
+        <div class="stat-icon">🗣️</div>
+        <div class="stat-number" data-target="134">0</div>
+        <div class="stat-label">تصريح رسمي</div>
+      </div>
+      <div class="stat-card" data-aos="zoom-in" data-delay="300">
+        <div class="stat-icon">👥</div>
+        <div class="stat-number" data-target="1820">0</div>
+        <div class="stat-label">مواطن تواصل معنا</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Features Section -->
+<section class="features-section">
+  <div class="container">
+    <div class="section-header" data-aos="fade-up">
+      <span class="section-tag">خدمات المواطن</span>
+      <h2>كيف يمكنني مساعدتك؟</h2>
+      <p>نوفر لك جميع قنوات التواصل والمتابعة لضمان وصول صوتك</p>
+    </div>
+
+    <div class="features-grid">
+      <a href="complaints.html" class="feature-card" data-aos="fade-up" data-delay="0">
+        <div class="feature-icon" style="background: linear-gradient(135deg,#006233,#00a854)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        </div>
+        <h3>تقديم شكوى أو اقتراح</h3>
+        <p>أرسل شكواك أو اقتراحك مباشرة مع متابعة حالة الملف برقم مرجعي</p>
+        <span class="feature-arrow">←</span>
+      </a>
+
+      <a href="complaints.html#track" class="feature-card" data-aos="fade-up" data-delay="100">
+        <div class="feature-icon" style="background: linear-gradient(135deg,#C9A227,#f0c040)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        </div>
+        <h3>متابعة الطلب</h3>
+        <p>تتبع حالة طلبك في الوقت الفعلي باستخدام الرقم المرجعي</p>
+        <span class="feature-arrow">←</span>
+      </a>
+
+      <a href="archive.html" class="feature-card" data-aos="fade-up" data-delay="200">
+        <div class="feature-icon" style="background: linear-gradient(135deg,#1a3a6b,#2563eb)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        </div>
+        <h3>الأرشيف البرلماني</h3>
+        <p>اطلع على جميع تصريحات، جلسات، ومشاريع القوانين المقدمة</p>
+        <span class="feature-arrow">←</span>
+      </a>
+
+      <a href="news.html" class="feature-card" data-aos="fade-up" data-delay="300">
+        <div class="feature-icon" style="background: linear-gradient(135deg,#7c3aed,#a855f7)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2zm0 0L8 4"/><line x1="16" y1="2" x2="16" y2="11"/></svg>
+        </div>
+        <h3>الأخبار والمستجدات</h3>
+        <p>تابع آخر أخبار النائب وأنشطته البرلمانية والميدانية</p>
+        <span class="feature-arrow">←</span>
+      </a>
+
+      <a href="contact.html" class="feature-card" data-aos="fade-up" data-delay="400">
+        <div class="feature-icon" style="background: linear-gradient(135deg,#dc2626,#ef4444)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13.6a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 3h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 10.9a16 16 0 0 0 6 6l.93-.93a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 18.92"/></svg>
+        </div>
+        <h3>تواصل مباشر</h3>
+        <p>اتصل بمكتب النائب أو أرسل رسالة مباشرة عبر النموذج</p>
+        <span class="feature-arrow">←</span>
+      </a>
+
+      <a href="deputy.html#program" class="feature-card" data-aos="fade-up" data-delay="500">
+        <div class="feature-icon" style="background: linear-gradient(135deg,#059669,#10b981)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        </div>
+        <h3>البرنامج الانتخابي</h3>
+        <p>اطلع على برنامج النائب وتعهداته الانتخابية ومتابعة تنفيذها</p>
+        <span class="feature-arrow">←</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- Latest News Section -->
+<section class="news-preview-section">
+  <div class="container">
+    <div class="section-header" data-aos="fade-up">
+      <span class="section-tag">آخر الأخبار</span>
+      <h2>المستجدات والأنشطة</h2>
+    </div>
+    <div class="news-preview-grid" id="newsPreview"></div>
+    <div class="section-footer" data-aos="fade-up">
+      <a href="news.html" class="btn-outline">عرض جميع الأخبار ←</a>
+    </div>
+  </div>
+</section>
+
+<!-- Recent Complaints Summary -->
+<section class="complaints-summary-section">
+  <div class="container">
+    <div class="cs-grid">
+      <div class="cs-left" data-aos="fade-right">
+        <span class="section-tag">بوابة الشكاوى</span>
+        <h2>صوتك يُسمع هنا</h2>
+        <p>نأخذ كل شكوى واقتراح بجدية تامة. فريقنا يعمل على متابعة كل ملف حتى يصل إلى حله.</p>
+        <div class="complaint-stats">
+          <div class="cs-stat">
+            <span class="cs-num green" id="totalComplaints">0</span>
+            <span>إجمالي الطلبات</span>
+          </div>
+          <div class="cs-stat">
+            <span class="cs-num gold" id="pendingComplaints">0</span>
+            <span>قيد المعالجة</span>
+          </div>
+          <div class="cs-stat">
+            <span class="cs-num blue" id="resolvedComplaints">0</span>
+            <span>تم حلها</span>
+          </div>
+        </div>
+        <a href="complaints.html" class="btn-primary">تقديم طلب الآن</a>
+      </div>
+      <div class="cs-right" data-aos="fade-left">
+        <div class="track-widget">
+          <h3>🔍 تتبع طلبك</h3>
+          <p>أدخل الرقم المرجعي لمعرفة حالة طلبك</p>
+          <div class="track-input-group">
+            <input type="text" id="trackRef" placeholder="مثال: DZ-2026-00001" class="track-input">
+            <button onclick="trackRequest()" class="track-btn">بحث</button>
+          </div>
+          <div id="trackResult" class="track-result hidden"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Program Highlights -->
+<section class="program-section">
+  <div class="container">
+    <div class="section-header" data-aos="fade-up">
+      <span class="section-tag">البرنامج السياسي</span>
+      <h2>أولوياتنا من أجلك</h2>
+    </div>
+    <div class="program-grid">
+      <div class="program-card" data-aos="fade-up" data-delay="0">
+        <div class="program-num">01</div>
+        <div class="program-icon">🏗️</div>
+        <h3>التنمية المحلية</h3>
+        <p>تطوير البنية التحتية، الطرق، والمرافق العامة في الدائرة</p>
+        <div class="program-progress"><div class="pp-bar" style="width:65%"></div></div>
+        <span class="pp-pct">65% مُنجز</span>
+      </div>
+      <div class="program-card" data-aos="fade-up" data-delay="100">
+        <div class="program-num">02</div>
+        <div class="program-icon">🎓</div>
+        <h3>التعليم والشباب</h3>
+        <p>دعم المدارس والجامعات وتوفير فرص العمل للشباب</p>
+        <div class="program-progress"><div class="pp-bar" style="width:45%"></div></div>
+        <span class="pp-pct">45% مُنجز</span>
+      </div>
+      <div class="program-card" data-aos="fade-up" data-delay="200">
+        <div class="program-num">03</div>
+        <div class="program-icon">🏥</div>
+        <h3>الصحة والاجتماع</h3>
+        <p>تحسين الخدمات الصحية ودعم الفئات الهشة والأسر المحتاجة</p>
+        <div class="program-progress"><div class="pp-bar" style="width:55%"></div></div>
+        <span class="pp-pct">55% مُنجز</span>
+      </div>
+      <div class="program-card" data-aos="fade-up" data-delay="300">
+        <div class="program-num">04</div>
+        <div class="program-icon">💼</div>
+        <h3>الاقتصاد والاستثمار</h3>
+        <p>استقطاب الاستثمارات وتطوير القطاع الفلاحي والصناعي</p>
+        <div class="program-progress"><div class="pp-bar" style="width:30%"></div></div>
+        <span class="pp-pct">30% مُنجز</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Contact CTA -->
+<section class="cta-section">
+  <div class="container">
+    <div class="cta-box" data-aos="zoom-in">
+      <div class="cta-bg"></div>
+      <div class="cta-content">
+        <h2>هل تحتاج إلى مساعدة؟</h2>
+        <p>مكتبنا مفتوح أمام جميع المواطنين. لا تتردد في التواصل معنا بأي مشكلة أو استفسار.</p>
+        <div class="cta-actions">
+          <a href="complaints.html" class="btn-white">تقديم شكوى</a>
+          <a href="contact.html" class="btn-outline-white">تواصل معنا</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="nav-logo">
+          <div class="logo-icon">
+            <svg viewBox="0 0 40 40" fill="none">
+              <circle cx="20" cy="20" r="18" stroke="#C9A227" stroke-width="1.5"/>
+              <path d="M8 20 Q20 5 32 20 Q20 35 8 20Z" fill="#006233"/>
+              <circle cx="20" cy="20" r="4" fill="#C9A227"/>
+            </svg>
+          </div>
+          <div class="logo-text">
+            <span class="logo-name">النائب البرلماني</span>
+            <span class="logo-sub">الموقع الرسمي</span>
+          </div>
+        </div>
+        <p>الموقع الرسمي للنائب البرلماني — في خدمة المواطن والوطن منذ 2026</p>
+        <div class="social-links">
+          <a href="#" class="social-btn" title="فيسبوك">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+          </a>
+          <a href="#" class="social-btn" title="تويتر/X">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 4l16 16M4 20L20 4"/></svg>
+          </a>
+          <a href="#" class="social-btn" title="يوتيوب">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46a2.78 2.78 0 0 0-1.95 1.96A29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58A2.78 2.78 0 0 0 3.41 19.6C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.95-1.95A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58zM10 15V9l5.2 3-5.2 3z"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <div class="footer-links">
+        <h4>روابط سريعة</h4>
+        <ul>
+          <li><a href="index.html">الرئيسية</a></li>
+          <li><a href="deputy.html">نبذة عن النائب</a></li>
+          <li><a href="archive.html">الأرشيف البرلماني</a></li>
+          <li><a href="news.html">الأخبار</a></li>
+          <li><a href="media.html">معرض الوسائط</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-links">
+        <h4>خدمات المواطن</h4>
+        <ul>
+          <li><a href="complaints.html">تقديم شكوى</a></li>
+          <li><a href="complaints.html#track">متابعة الطلب</a></li>
+          <li><a href="complaints.html#suggest">اقتراح</a></li>
+          <li><a href="contact.html">تواصل معنا</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-contact">
+        <h4>معلومات التواصل</h4>
+        <div class="contact-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          <span id="footerAddress">سيدي لخضر — ولاية مستغانم</span>
+        </div>
+        <div class="contact-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13.6a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 3h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 10.9a16 16 0 0 0 6 6l.93-.93a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 18.92"/></svg>
+          <span>+213 (0) 45 40 20 26</span>
+        </div>
+        <div class="contact-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          <span>LAIDANI.MOURAD@GMAIL.COM</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>© 2026 — الموقع الرسمي للنائب البرلماني الأستاذ مراد لعيداني — ولاية مستغانم. جميع الحقوق محفوظة.</p>
+      <p>صُمم وطُوِّر لخدمة المواطن الجزائري 🇩🇿</p>
+    </div>
+  </div>
+</footer>
+
+<script src="js/data.js"></script>
+<script src="js/main.js"></script>
+<script src="js/home.js"></script>
+</body>
+</html>
+
+

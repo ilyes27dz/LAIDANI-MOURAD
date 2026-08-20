@@ -1,0 +1,114 @@
+﻿<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الأرشيف البرلماني | النائب الأستاذ مراد لعيداني</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/archive.css">
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+</head>
+<body class="theme-dark">
+    <!-- Navbar -->
+    <nav class="navbar scrolled" id="navbar">
+      <div class="nav-container">
+        <a href="index.html" class="nav-logo">
+          <div class="logo-icon" style="overflow:hidden;border-radius:50%;border:2px solid var(--gold);width:36px;height:36px;flex-shrink:0;">
+            <img src="assets/apn-logo.jpg" alt="شعار المجلس الشعبي الوطني" style="width:100%;height:100%;object-fit:cover;" onerror="this.src='10.jpg'">
+          </div>
+          <div class="logo-text"><span class="logo-name">مراد لعيداني</span><span class="logo-sub">نائب ولاية مستغانم — المجلس الشعبي الوطني</span></div>
+        </a>
+        <ul class="nav-links" id="navLinks">
+          <li><a href="index.html" class="nav-link">الرئيسية</a></li>
+          <li><a href="deputy.html" class="nav-link">النائب</a></li>
+          <li><a href="archive.html" class="nav-link active">الأرشيف البرلماني</a></li>
+          <li><a href="news.html" class="nav-link">الأخبار</a></li>
+          <li><a href="complaints.html" class="nav-link">الشكاوى</a></li>
+          <li><a href="media.html" class="nav-link">الوسائط</a></li>
+          <li><a href="contact.html" class="nav-link">التواصل</a></li>
+          <li><a href="admin.html" class="nav-link admin-link" style="display:none !important; visibility:hidden; pointer-events:none;">🔐 لوحة التحكم</a></li>
+        </ul>
+        <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+      </div>
+    </nav>
+
+    <!-- Page Hero -->
+    <header class="page-hero">
+        <div class="container">
+            <h1 class="hero-title">الأرشيف البرلماني</h1>
+            <p class="hero-subtitle">سجل شامل للنشاطات، التصريحات، والتدخلات البرلمانية</p>
+        </div>
+    </header>
+
+    <main class="main-content container">
+        <!-- Filter and Search -->
+        <div class="archive-controls">
+            <div class="filter-bar" id="archiveFilter">
+                <button class="filter-btn active" data-filter="all">الكل</button>
+                <button class="filter-btn" data-filter="statement">تصريحات</button>
+                <button class="filter-btn" data-filter="law">مشاريع قوانين</button>
+                <button class="filter-btn" data-filter="session">جلسات</button>
+                <button class="filter-btn" data-filter="question">أسئلة برلمانية</button>
+            </div>
+            <div class="search-box">
+                <input type="text" id="archiveSearch" placeholder="ابحث في الأرشيف...">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            </div>
+        </div>
+
+        <!-- Archive Grid -->
+        <div class="archive-grid" id="archiveGrid">
+            <!-- Rendered by JS -->
+        </div>
+        
+        <!-- Empty State -->
+        <div class="empty-state hidden" id="archiveEmpty">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+            <h3>لا توجد نتائج</h3>
+            <p>لم يتم العثور على أي سجلات تطابق بحثك.</p>
+        </div>
+    </main>
+
+    <!-- Archive Item Modal -->
+    <div class="modal-overlay hidden" id="archiveModal">
+        <div class="modal-content" style="max-width: 650px;">
+            <button class="modal-close" id="closeArchiveModal">&times;</button>
+            <div class="modal-header">
+                <span class="modal-category" id="archiveModalType">نوع النشاط</span>
+                <span class="modal-date" id="archiveModalDate">التاريخ</span>
+            </div>
+            <h2 class="modal-title" id="archiveModalTitle">عنوان الوثيقة البرلمانية</h2>
+            <div class="modal-body" id="archiveModalBody">
+                <!-- Injected via JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-grid">
+          <div class="footer-brand">
+            <div class="nav-logo">
+                <div class="logo-icon"><svg viewBox="0 0 40 40" fill="none"><circle cx="20" cy="20" r="18" stroke="#C9A227" stroke-width="1.5"/><path d="M8 20 Q20 5 32 20 Q20 35 8 20Z" fill="#006233"/><circle cx="20" cy="20" r="4" fill="#C9A227"/></svg></div>
+                <div class="logo-text"><span class="logo-name">النائب البرلماني</span><span class="logo-sub">الموقع الرسمي</span></div>
+            </div>
+            <p>الموقع الرسمي للنائب البرلماني — في خدمة المواطن والوطن منذ 2026</p>
+          </div>
+          <div class="footer-links"><h4>روابط سريعة</h4><ul><li><a href="index.html">الرئيسية</a></li><li><a href="deputy.html">النائب</a></li><li><a href="archive.html">الأرشيف البرلماني</a></li><li><a href="news.html">الأخبار</a></li></ul></div>
+          <div class="footer-links"><h4>خدمات المواطن</h4><ul><li><a href="complaints.html">تقديم شكوى</a></li><li><a href="contact.html">تواصل معنا</a></li></ul></div>
+          <div class="footer-contact"><h4>تواصل</h4><div class="contact-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07"/></svg><span>+213 XX XX XX XX</span></div></div>
+        </div>
+        <div class="footer-bottom"><p>© 2026 — الموقع الرسمي للنائب البرلماني 🇩🇿</p></div>
+      </div>
+    </footer>
+
+    <script src="js/data.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/archive.js"></script>
+</body>
+</html>
+
+

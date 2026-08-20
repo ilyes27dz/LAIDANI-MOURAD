@@ -1,0 +1,161 @@
+﻿<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تواصل مع النائب الأستاذ مراد لعيداني | الموقع الرسمي</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/contact.css">
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+</head>
+<body>
+    <nav class="navbar scrolled" id="navbar">
+      <div class="nav-container">
+        <a href="index.html" class="nav-logo">
+          <div class="logo-icon" style="overflow:hidden;border-radius:50%;border:2px solid var(--gold);width:36px;height:36px;flex-shrink:0;">
+            <img src="assets/apn-logo.jpg" alt="شعار المجلس الشعبي الوطني" style="width:100%;height:100%;object-fit:cover;" onerror="this.src='10.jpg'">
+          </div>
+          <div class="logo-text"><span class="logo-name">مراد لعيداني</span><span class="logo-sub">نائب ولاية مستغانم — المجلس الشعبي الوطني</span></div>
+        </a>
+        <ul class="nav-links" id="navLinks">
+          <li><a href="index.html" class="nav-link">الرئيسية</a></li>
+          <li><a href="deputy.html" class="nav-link">النائب</a></li>
+          <li><a href="archive.html" class="nav-link">الأرشيف البرلماني</a></li>
+          <li><a href="news.html" class="nav-link">الأخبار</a></li>
+          <li><a href="complaints.html" class="nav-link">الشكاوى</a></li>
+          <li><a href="media.html" class="nav-link">الوسائط</a></li>
+          <li><a href="contact.html" class="nav-link active">التواصل</a></li>
+          <li><a href="admin.html" class="nav-link admin-link" style="display:none !important; visibility:hidden; pointer-events:none;">🔐 لوحة التحكم</a></li>
+        </ul>
+        <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+      </div>
+    </nav>
+
+    <header class="page-hero">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <h1>تواصل معنا</h1>
+            <p>نحن هنا للاستماع إلى انشغالاتكم ومقترحاتكم</p>
+        </div>
+    </header>
+
+    <main class="contact-page">
+        <section class="contact-section">
+            <div class="container contact-grid">
+                <div class="contact-form-col">
+                    <h2>أرسل رسالة</h2>
+                    <form id="contactForm" class="contact-form">
+                        <div class="form-group">
+                            <label for="name">الاسم الكامل</label>
+                            <input type="text" id="name" required placeholder="أدخل اسمك الكامل">
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">رقم الهاتف</label>
+                            <input type="tel" id="phone" required placeholder="أدخل رقم هاتفك">
+                        </div>
+                        <div class="form-group">
+                            <label for="email">البريد الإلكتروني</label>
+                            <input type="email" id="email" required placeholder="أدخل بريدك الإلكتروني">
+                        </div>
+                        <div class="form-group">
+                            <label for="subject">الموضوع</label>
+                            <input type="text" id="subject" required placeholder="موضوع الرسالة">
+                        </div>
+                        <div class="form-group">
+                            <label for="message">الرسالة</label>
+                            <textarea id="message" rows="5" required placeholder="اكتب رسالتك هنا..."></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary submit-btn">إرسال الرسالة</button>
+                        <div id="formSuccess" class="form-success" style="display: none;">تم إرسال رسالتك بنجاح. سنتواصل معك قريباً!</div>
+                    </form>
+                </div>
+                
+                <div class="contact-info-col">
+                    <h2>معلومات المداومة البرلمانية</h2>
+                    <div class="info-cards">
+                        <div class="info-card">
+                            <div class="info-icon">📍</div>
+                            <div class="info-text">
+                                <h3>مكتب المداومة البرلمانية</h3>
+                                <p>المكتب البرلماني للنائب مراد لعيداني — سيدي لخضر، ولاية مستغانم</p>
+                            </div>
+                        </div>
+                        <div class="info-card">
+                            <div class="info-icon">📞</div>
+                            <div class="info-text">
+                                <h3>الهاتف والفاكس</h3>
+                                <p dir="ltr">+213 (0) 45 40 20 26</p>
+                            </div>
+                        </div>
+                        <div class="info-card">
+                            <div class="info-icon">✉️</div>
+                            <div class="info-text">
+                                <h3>البريد الإلكتروني الرسمي</h3>
+                                <p>LAIDANI.MOURAD@GMAIL.COM</p>
+                            </div>
+                        </div>
+                        <div class="info-card">
+                            <div class="info-icon">🕒</div>
+                            <div class="info-text">
+                                <h3>أوقات الاستقبال والعمل</h3>
+                                <p>الأحد - الخميس: 08:30 صباحاً - 16:30 مساءً (يوم الثلاثاء مخصص لمقابلات المواطنين)</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="social-links-section">
+                        <h3>قنوات التواصل الرسمية</h3>
+                        <div class="social-links">
+                            <a href="https://facebook.com" target="_blank" class="social-link">فيسبوك</a>
+                            <a href="https://twitter.com" target="_blank" class="social-link">تويتر (X)</a>
+                            <a href="https://youtube.com" target="_blank" class="social-link">يوتيوب</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="faq-section">
+            <div class="container">
+                <h2>الأسئلة الشائعة</h2>
+                <div class="faq-accordion">
+                    <div class="faq-item">
+                        <button class="faq-question">ما هي الأوقات المناسبة لزيارة مكتب النائب؟ <span class="faq-icon">+</span></button>
+                        <div class="faq-answer"><p>يمكنكم زيارة مكتبنا خلال أوقات العمل الرسمية من الأحد إلى الخميس، من الساعة الثامنة صباحاً حتى الرابعة والنصف مساءً. يفضل حجز موعد مسبق لتجنب الانتظار.</p></div>
+                    </div>
+                    <div class="faq-item">
+                        <button class="faq-question">كيف يمكنني تقديم شكوى رسمية؟ <span class="faq-icon">+</span></button>
+                        <div class="faq-answer"><p>يمكنكم تقديم شكوى من خلال صفحة "الشكاوى" في الموقع، أو بزيارة مكتبنا شخصياً وتقديم طلب مكتوب مرفق بالوثائق الثبوتية اللازمة.</p></div>
+                    </div>
+                    <div class="faq-item">
+                        <button class="faq-question">كم تستغرق معالجة الرسائل والشكاوى؟ <span class="faq-icon">+</span></button>
+                        <div class="faq-answer"><p>نحرص على الرد على جميع المراسلات في أقرب وقت ممكن. عادة ما تستغرق المعالجة الأولية بين 3 إلى 5 أيام عمل، وقد تختلف المدة حسب طبيعة الموضوع.</p></div>
+                    </div>
+                    <div class="faq-item">
+                        <button class="faq-question">هل يمكن طلب مقابلة شخصية مع النائب؟ <span class="faq-icon">+</span></button>
+                        <div class="faq-answer"><p>نعم، يخصص النائب يوم الثلاثاء من كل أسبوع لاستقبال المواطنين. يرجى التواصل معنا عبر الهاتف أو النموذج أعلاه لتحديد موعد.</p></div>
+                    </div>
+                    <div class="faq-item">
+                        <button class="faq-question">هل يغطي النائب انشغالات كل الولايات؟ <span class="faq-icon">+</span></button>
+                        <div class="faq-answer"><p>بصفته نائباً في المجلس الشعبي الوطني، فإنه يمثل الأمة جمعاء، ويسعى لمعالجة القضايا الوطنية، مع التركيز الخاص على انشغالات الدائرة الانتخابية التي يمثلها.</p></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-bottom">
+            <p>&copy; 2026 الموقع الرسمي للنائب البرلماني. جميع الحقوق محفوظة.</p>
+        </div>
+    </footer>
+
+    <script src="js/data.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/contact.js"></script>
+</body>
+</html>
+
+
+

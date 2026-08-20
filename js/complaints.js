@@ -77,38 +77,41 @@ function updateCommunes() {
 }
 
 // Submit Complaint
-function submitComplaint(e) {
+async function submitComplaint(e) {
   e.preventDefault();
   const btn = document.getElementById('submitBtn');
   btn.disabled = true;
-  btn.innerHTML = '<span>⏳ جاري الإرسال...</span>';
+  btn.innerHTML = '<span>⏳ جاري الإرسال وحفظ الطلب في السحابة...</span>';
 
-  setTimeout(() => {
-    const daira = document.getElementById('cDaira') ? document.getElementById('cDaira').value : '';
-    const commune = document.getElementById('cCommune') ? document.getElementById('cCommune').value : '';
-    const address = document.getElementById('cAddress') ? document.getElementById('cAddress').value : '';
-    const fullLocation = `بلدية ${commune} (${daira}) — ${address}`;
+  const daira = document.getElementById('cDaira') ? document.getElementById('cDaira').value : '';
+  const commune = document.getElementById('cCommune') ? document.getElementById('cCommune').value : '';
+  const address = document.getElementById('cAddress') ? document.getElementById('cAddress').value : '';
+  const fullLocation = `بلدية ${commune} (${daira}) — ${address}`;
 
-    const data = {
-      name: document.getElementById('cName').value,
-      phone: document.getElementById('cPhone').value,
-      email: document.getElementById('cEmail').value,
-      location: fullLocation,
-      type: document.getElementById('cType').value,
-      subject: document.getElementById('cSubject').value,
-      details: document.getElementById('cDetails').value
-    };
+  const data = {
+    name: document.getElementById('cName').value,
+    phone: document.getElementById('cPhone').value,
+    email: document.getElementById('cEmail').value,
+    location: fullLocation,
+    type: document.getElementById('cType').value,
+    subject: document.getElementById('cSubject').value,
+    details: document.getElementById('cDetails').value
+  };
 
-    const complaint = addComplaint(data);
+  let complaint = null;
+  if (window.db && typeof window.db.addComplaint === 'function') {
+    complaint = await window.db.addComplaint(data);
+  } else {
+    complaint = addComplaint(data);
+  }
 
-    document.getElementById('complaintForm').classList.add('hidden');
-    const success = document.getElementById('submitSuccess');
-    success.classList.remove('hidden');
-    document.getElementById('refNumber').textContent = complaint.id;
+  document.getElementById('complaintForm').classList.add('hidden');
+  const success = document.getElementById('submitSuccess');
+  success.classList.remove('hidden');
+  document.getElementById('refNumber').textContent = complaint.id;
 
-    renderRecentComplaints();
-    showToast('تم تقديم شكواك بنجاح! ✅', 'success');
-  }, 1200);
+  renderRecentComplaints();
+  showToast('تم تقديم شكواك وحفظها بنجاح! ✅', 'success');
 }
 
 function resetForm() {

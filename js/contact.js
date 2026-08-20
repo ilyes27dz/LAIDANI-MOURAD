@@ -4,23 +4,34 @@ document.addEventListener('DOMContentLoaded', () => {
     const formSuccess = document.getElementById('formSuccess');
 
     if (contactForm) {
-        contactForm.addEventListener('submit', (e) => {
+        contactForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             
+            const submitBtn = contactForm.querySelector('button[type="submit"]');
+            if (submitBtn) {
+                submitBtn.disabled = true;
+                submitBtn.textContent = '⏳ جاري إرسال الرسالة...';
+            }
+
             const name = document.getElementById('name').value;
             const phone = document.getElementById('phone').value;
             const email = document.getElementById('email').value;
             const subject = document.getElementById('subject').value;
             const message = document.getElementById('message').value;
 
-            // Assuming addMessage exists in data.js, fallback if not
-            if (typeof addMessage === 'function') {
-                addMessage({ name, phone, email, subject, message });
-            } else {
-                console.log('Form data:', { name, phone, email, subject, message });
+            const msgData = { name, phone, email, subject, message };
+
+            if (window.db && typeof window.db.addMessage === 'function') {
+                await window.db.addMessage(msgData);
+            } else if (typeof addMessage === 'function') {
+                addMessage(msgData);
             }
 
             contactForm.reset();
+            if (submitBtn) {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'إرسال الرسالة';
+            }
             formSuccess.style.display = 'block';
             
             setTimeout(() => {

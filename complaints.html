@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
@@ -85,8 +85,9 @@
               <input type="text" class="form-input" id="cName" placeholder="أدخل اسمك الكامل" required>
             </div>
             <div class="form-group">
-              <label class="form-label">رقم الهاتف</label>
-              <input type="tel" class="form-input" id="cPhone" placeholder="+213 XX XX XX XX">
+              <label class="form-label">رقم الهاتف <span style="color:rgba(255,255,255,0.35);font-size:12px;">(اختياري)</span></label>
+              <input type="tel" class="form-input" id="cPhone" placeholder="0X XX XX XX XX" dir="ltr" style="text-align:left; letter-spacing:1px; font-family:monospace; font-size:15px;" maxlength="10" pattern="0[567]\d{8}" title="أدخل رقم هاتف جزائري صحيح مكوّن من 10 أرقام يبدأ بـ 05 أو 06 أو 07" inputmode="numeric">
+              <small id="phoneError" style="color:#f87171;font-size:12px;display:none;margin-top:4px;">⚠️ رقم الهاتف يجب أن يكون 10 أرقام ويبدأ بـ 05 أو 06 أو 07</small>
             </div>
           </div>
 
@@ -141,13 +142,13 @@
           </div>
 
           <div class="form-group">
-            <label class="form-label">موضوع الشكوى *</label>
-            <input type="text" class="form-input" id="cSubject" placeholder="اكتب موضوعاً مختصراً لطلبك" required>
+            <label class="form-label">موضوع الشكوى <span style="color:rgba(255,255,255,0.35);font-size:12px;">(اختياري)</span></label>
+            <input type="text" class="form-input" id="cSubject" placeholder="اكتب موضوعاً مختصراً لطلبك (اختياري)">
           </div>
 
           <div class="form-group">
-            <label class="form-label">تفاصيل الشكوى *</label>
-            <textarea class="form-textarea" id="cDetails" placeholder="اشرح مشكلتك بالتفصيل... (المكان، التاريخ، الجهات المعنية...)" required style="min-height:180px;"></textarea>
+            <label class="form-label">تفاصيل الشكوى <span style="color:rgba(255,255,255,0.35);font-size:12px;">(اختياري)</span></label>
+            <textarea class="form-textarea" id="cDetails" placeholder="اشرح مشكلتك بالتفصيل... (المكان، التاريخ، الجهات المعنية...) — اختياري" style="min-height:180px;"></textarea>
           </div>
 
           <div class="form-check">

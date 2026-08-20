@@ -4,7 +4,77 @@ document.addEventListener('DOMContentLoaded', () => {
   initTabs();
   renderRecentComplaints();
   handleHashTab();
+  initPhoneValidation();
 });
+
+// ── التحقق من رقم الهاتف الجزائري ──
+function initPhoneValidation() {
+  const phoneInput = document.getElementById('cPhone');
+  const phoneError = document.getElementById('phoneError');
+  if (!phoneInput) return;
+
+  // السماح فقط بالأرقام
+  phoneInput.addEventListener('keypress', (e) => {
+    if (!/[0-9]/.test(e.key)) e.preventDefault();
+  });
+
+  // منع اللصق غير الرقمي وتنظيف القيمة
+  phoneInput.addEventListener('paste', (e) => {
+    e.preventDefault();
+    const pasted = (e.clipboardData || window.clipboardData).getData('text');
+    const digits = pasted.replace(/\D/g, '').slice(0, 10);
+    phoneInput.value = digits;
+    validatePhone(phoneInput, phoneError);
+  });
+
+  // التحقق أثناء الكتابة
+  phoneInput.addEventListener('input', () => {
+    // إزالة أي حرف غير رقمي
+    phoneInput.value = phoneInput.value.replace(/\D/g, '').slice(0, 10);
+    validatePhone(phoneInput, phoneError);
+  });
+
+  // التحقق عند مغادرة الحقل
+  phoneInput.addEventListener('blur', () => {
+    if (phoneInput.value.length > 0) validatePhone(phoneInput, phoneError, true);
+  });
+}
+
+function validatePhone(input, errorEl, strict = false) {
+  const val = input.value;
+  const algerianPattern = /^0[567]\d{8}$/;
+
+  if (val.length === 0) {
+    // اختياري - لا خطأ إذا فارغ
+    if (errorEl) errorEl.style.display = 'none';
+    input.style.borderColor = '';
+    return true;
+  }
+
+  if (strict && val.length < 10) {
+    if (errorEl) errorEl.style.display = 'block';
+    input.style.borderColor = '#f87171';
+    return false;
+  }
+
+  if (val.length === 10 && !algerianPattern.test(val)) {
+    if (errorEl) errorEl.style.display = 'block';
+    input.style.borderColor = '#f87171';
+    return false;
+  }
+
+  if (val.length === 10 && algerianPattern.test(val)) {
+    if (errorEl) errorEl.style.display = 'none';
+    input.style.borderColor = '#22c55e';
+    return true;
+  }
+
+  // جاري الكتابة - لا تظهر الخطأ
+  if (errorEl) errorEl.style.display = 'none';
+  input.style.borderColor = '';
+  return false;
+}
+
 
 function initTabs() {
   const buttons = document.querySelectorAll('.tab-btn');
@@ -80,6 +150,21 @@ function updateCommunes() {
 async function submitComplaint(e) {
   e.preventDefault();
   const btn = document.getElementById('submitBtn');
+
+  // التحقق من رقم الهاتف إذا أُدخل
+  const phoneInput = document.getElementById('cPhone');
+  const phoneError = document.getElementById('phoneError');
+  if (phoneInput && phoneInput.value.length > 0) {
+    const algerianPattern = /^0[567]\d{8}$/;
+    if (!algerianPattern.test(phoneInput.value)) {
+      if (phoneError) phoneError.style.display = 'block';
+      phoneInput.style.borderColor = '#f87171';
+      phoneInput.focus();
+      showToast('⚠️ رقم الهاتف غير صحيح — يجب أن يكون 10 أرقام ويبدأ بـ 05 أو 06 أو 07', 'warning');
+      return;
+    }
+  }
+
   btn.disabled = true;
   btn.innerHTML = '<span>⏳ جاري الإرسال وحفظ الطلب في السحابة...</span>';
 

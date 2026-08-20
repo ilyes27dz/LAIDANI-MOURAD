@@ -76,13 +76,6 @@ function initHamburger() {
   hamburger.onclick = toggleMenu;
   overlay.onclick = closeMenu;
 
-  // إغلاق عند اختيار أي رابط
-  navLinks.querySelectorAll('.nav-link').forEach(link => {
-    link.onclick = () => {
-      closeMenu();
-    };
-  });
-
   // إغلاق بضغط Escape
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeMenu(); });
 }

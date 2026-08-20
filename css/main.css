@@ -579,6 +579,9 @@ input, textarea, select { font-family: var(--font); }
   .nav-links li {
     width: 100% !important;
     margin: 2px 0 !important;
+    list-style: none !important;
+    position: relative !important;
+    z-index: 100000 !important;
   }
   .nav-link {
     display: flex !important;
@@ -592,8 +595,13 @@ input, textarea, select { font-family: var(--font); }
     border: 1px solid rgba(255,255,255,0.12) !important;
     border-radius: 10px !important;
     transition: all 0.2s ease !important;
+    cursor: pointer !important;
+    pointer-events: auto !important;
+    position: relative !important;
+    z-index: 100001 !important;
+    text-decoration: none !important;
   }
-  .nav-link:hover {
+  .nav-link:hover, .nav-link:focus, .nav-link:active {
     background: rgba(201,162,39,0.2) !important;
     color: var(--gold) !important;
     border-color: var(--gold) !important;

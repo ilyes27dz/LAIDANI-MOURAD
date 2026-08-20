@@ -70,11 +70,6 @@ function initHamburger() {
   // إغلاق عند الضغط على الـ overlay
   overlay.addEventListener('click', closeMenu);
 
-  // إغلاق عند اختيار رابط
-  navLinks.querySelectorAll('.nav-link').forEach(link => {
-    link.addEventListener('click', closeMenu);
-  });
-
   // إغلاق بضغط Escape
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeMenu(); });
 }

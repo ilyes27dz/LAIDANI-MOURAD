@@ -124,22 +124,34 @@ function resetForm() {
 }
 
 // Track
-function trackFull() {
+async function trackFull() {
   const input = document.getElementById('trackRefFull');
   const result = document.getElementById('trackResultFull');
   const ref = input.value.trim();
 
   if (!ref) { showToast('يرجى إدخال الرقم المرجعي', 'warning'); return; }
 
-  const complaint = getComplaintById(ref);
   result.classList.remove('hidden');
+  result.innerHTML = `
+    <div style="text-align:center;padding:32px;">
+      <div style="font-size:32px;margin-bottom:12px;">⏳</div>
+      <div style="font-size:16px;color:var(--gold);">جاري فحص وتتبع الطلب من السحابة...</div>
+    </div>
+  `;
+
+  let complaint = null;
+  if (window.db && typeof window.db.getComplaintById === 'function') {
+    complaint = await window.db.getComplaintById(ref);
+  } else if (typeof getComplaintById === 'function') {
+    complaint = getComplaintById(ref);
+  }
 
   if (!complaint) {
     result.innerHTML = `
       <div style="text-align:center;padding:32px;">
         <div style="font-size:48px;margin-bottom:16px;">🔍</div>
         <div style="font-size:18px;font-weight:600;color:#f87171;margin-bottom:8px;">لم يُعثر على هذا الطلب</div>
-        <p style="color:rgba(255,255,255,0.4);font-size:14px;">تأكد من الرقم المرجعي. مثال: DZ-2026-00001</p>
+        <p style="color:rgba(255,255,255,0.4);font-size:14px;">تأكد من الرقم المرجعي (مثال: DZ-2026-XXXX)</p>
       </div>
     `;
     return;

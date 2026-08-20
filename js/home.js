@@ -62,7 +62,7 @@ function updateComplaintStats() {
 }
 
 // Quick Track Widget on Home Page
-window.trackRequest = function() {
+window.trackRequest = async function() {
   const input = document.getElementById('trackRef');
   const result = document.getElementById('trackResult');
   if (!input || !result) return;
@@ -74,14 +74,21 @@ window.trackRequest = function() {
     return;
   }
 
-  const complaint = typeof getComplaintById === 'function' ? getComplaintById(ref) : null;
   result.classList.remove('hidden');
+  result.innerHTML = `<div style="color:var(--gold); font-size:13px; padding:10px;">⏳ جاري فحص حالة الطلب من السحابة...</div>`;
+
+  let complaint = null;
+  if (window.db && typeof window.db.getComplaintById === 'function') {
+    complaint = await window.db.getComplaintById(ref);
+  } else if (typeof getComplaintById === 'function') {
+    complaint = getComplaintById(ref);
+  }
 
   if (!complaint) {
     result.innerHTML = `
       <div style="background:rgba(239,68,68,0.1); border:1px solid rgba(239,68,68,0.3); border-radius:8px; padding:12px; margin-top:12px;">
         <strong style="color:#f87171; font-size:14px;">لم يتم العثور على طلب بهذا الرقم.</strong>
-        <p style="color:rgba(255,255,255,0.6); font-size:12px; margin-top:4px;">تأكد من كتابة الرقم بشكل صحيح (مثال: DZ-2026-00101)</p>
+        <p style="color:rgba(255,255,255,0.6); font-size:12px; margin-top:4px;">تأكد من كتابة الرقم بشكل صحيح (مثال: DZ-2026-XXXX)</p>
       </div>
     `;
     return;

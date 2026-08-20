@@ -1,4 +1,4 @@
-﻿// ============================================================
+// ============================================================
 // SUPABASE CLIENT CONFIGURATION
 // الموقع الرسمي للنائب البرلماني الأستاذ مراد لعيداني
 // ============================================================
@@ -58,6 +58,42 @@ window.db = {
     }
 
     return item;
+  },
+
+  async getComplaintById(refId) {
+    if (!refId) return null;
+    const cleanRef = refId.trim().toUpperCase();
+
+    // 1. البحث أولاً في السحابة
+    if (supabaseClient) {
+      try {
+        const { data, error } = await supabaseClient.from('complaints').select('*').eq('id', cleanRef).maybeSingle();
+        if (data && !error) {
+          return {
+            id: data.id,
+            name: data.name,
+            phone: data.phone,
+            email: data.email,
+            location: data.location,
+            type: data.type,
+            subject: data.subject,
+            details: data.details,
+            status: data.status,
+            officialResponse: data.response || '',
+            createdAt: data.created_at,
+            updatedAt: data.updated_at
+          };
+        }
+      } catch(e) {
+        console.warn("Supabase lookup fallback:", e);
+      }
+    }
+
+    // 2. البحث الاحتياطي المحلي
+    if (typeof getComplaintById === 'function') {
+      return getComplaintById(cleanRef);
+    }
+    return null;
   },
 
   async updateComplaintStatus(id, newStatus, officialResponse = '') {

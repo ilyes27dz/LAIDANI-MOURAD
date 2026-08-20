@@ -63,6 +63,10 @@ document.addEventListener('DOMContentLoaded', () => {
         renderAdminNews();
         renderAdminArchive();
         populateSettingsForm();
+        // Also kick off async cloud load
+        setTimeout(() => {
+            if (typeof loadDashboardStatsAsync === 'function') loadDashboardStatsAsync();
+        }, 500);
     }
 
     // ── 1. Statistics ──
@@ -93,14 +97,21 @@ document.addEventListener('DOMContentLoaded', () => {
     if (complaintFilter) complaintFilter.addEventListener('change', renderAdminComplaints);
     if (exportCsvBtn) exportCsvBtn.addEventListener('click', exportComplaintsToCSV);
 
-    function renderAdminComplaints() {
+    async function renderAdminComplaints() {
         const listElem = document.getElementById('adminComplaintsList');
-        if (!listElem || typeof getComplaints !== 'function') return;
+        if (!listElem) return;
+
+        listElem.innerHTML = `<tr><td colspan="8" style="text-align:center;color:var(--gold);padding:16px;">⏳ جاري تحميل الشكاوى من السحابة...</td></tr>`;
 
         const query = (complaintSearch ? complaintSearch.value : '').toLowerCase().trim();
         const filterVal = complaintFilter ? complaintFilter.value : 'all';
 
-        let complaints = getComplaints();
+        let complaints = [];
+        if (window.db && typeof window.db.getComplaints === 'function') {
+            complaints = await window.db.getComplaints();
+        } else if (typeof getComplaints === 'function') {
+            complaints = getComplaints();
+        }
 
         if (filterVal !== 'all') {
             complaints = complaints.filter(c => c.status === filterVal);
@@ -111,8 +122,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 (c.id && c.id.toLowerCase().includes(query)) ||
                 (c.name && c.name.toLowerCase().includes(query)) ||
                 (c.subject && c.subject.toLowerCase().includes(query)) ||
-                (c.location && c.location.toLowerCase().includes(query)) ||
-                (c.sector && c.sector.toLowerCase().includes(query))
+                (c.location && c.location.toLowerCase().includes(query))
             );
         }
 
@@ -129,7 +139,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         listElem.innerHTML = complaints.map(c => {
             const statusObj = getStatusLabel(c.status);
-            const dateStr = formatDate(c.createdAt || c.date);
+            const dateStr = formatDate(c.created_at || c.createdAt || c.date);
             return `
                 <tr>
                     <td><strong style="color:var(--gold);">${c.id}</strong></td>
@@ -137,7 +147,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <td><strong>${c.name}</strong><br><small class="text-muted">${c.phone || '-'}</small></td>
                     <td>${c.location || 'غير محدد'}</td>
                     <td>${c.subject}</td>
-                    <td><span class="badge-tag" style="background:rgba(255,255,255,0.08);">${c.sector || 'عام'}</span></td>
+                    <td><span class="badge-tag" style="background:rgba(255,255,255,0.08);">${c.type || 'عام'}</span></td>
                     <td><span class="badge-tag ${statusObj.class}">${statusObj.icon} ${statusObj.text}</span></td>
                     <td>
                         <div class="action-btn-group">
@@ -185,24 +195,32 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ── 3. Messages Management ──
-    function renderAdminMessages() {
+    async function renderAdminMessages() {
         const container = document.getElementById('adminMessagesList');
-        if (!container || typeof getMessages !== 'function') return;
+        if (!container) return;
 
-        const messages = getMessages();
+        container.innerHTML = `<div style="text-align:center;color:var(--gold);padding:24px;">⏳ جاري تحميل الرسائل من السحابة...</div>`;
+
+        let messages = [];
+        if (window.db && typeof window.db.getMessages === 'function') {
+            messages = await window.db.getMessages();
+        } else if (typeof getMessages === 'function') {
+            messages = getMessages();
+        }
+
         if (messages.length === 0) {
             container.innerHTML = `<div class="text-center py-4 text-muted">صندوق الرسائل فارغ حالياً.</div>`;
             return;
         }
 
         container.innerHTML = messages.map(m => `
-            <div class="message-card ${m.read ? '' : 'unread'}">
+            <div class="message-card ${m.is_read || m.read ? '' : 'unread'}">
                 <div class="d-flex justify-content-between align-items-center mb-1">
                     <div>
                         <strong style="font-size:1.1rem; color:var(--white);">${m.name}</strong>
-                        ${!m.read ? '<span class="badge-tag badge-new" style="margin-right:8px;">جديدة</span>' : ''}
+                        ${!(m.is_read || m.read) ? '<span class="badge-tag badge-new" style="margin-right:8px;">جديدة</span>' : ''}
                     </div>
-                    <small class="text-muted">${formatDate(m.date)}</small>
+                    <small class="text-muted">${formatDate(m.created_at || m.date)}</small>
                 </div>
                 <div class="mb-1" style="color:var(--gold); font-size:0.95rem;">
                     📌 ${m.subject || 'بدون موضوع'}
@@ -215,16 +233,42 @@ document.addEventListener('DOMContentLoaded', () => {
                         📞 ${m.phone || 'غير مسجل'} &nbsp;|&nbsp; ✉️ ${m.email || 'غير مسجل'}
                     </div>
                     <div class="action-btn-group">
-                        <button class="btn btn-xs btn-outline" onclick="handleToggleMessageRead(${m.id})">
-                            ${m.read ? 'تعليم كغير مقروء ✉️' : 'تعليم كمقروء ✔️'}
-                        </button>
                         ${m.email ? `<a href="mailto:${m.email}?subject=رد من المكتب البرلماني للنائب مراد لعيداني: ${encodeURIComponent(m.subject || '')}" class="btn btn-xs btn-primary">رد عبر البريد 📧</a>` : ''}
-                        <button class="btn btn-xs btn-danger" onclick="handleDeleteMessage(${m.id})">حذف 🗑️</button>
                     </div>
                 </div>
             </div>
         `).join('');
     }
+
+    // Async stats loader (reads from Supabase or fallback)
+    async function loadDashboardStatsAsync() {
+        let complaints = [];
+        let messages = [];
+        if (window.db) {
+            [complaints, messages] = await Promise.all([
+                window.db.getComplaints ? window.db.getComplaints() : Promise.resolve([]),
+                window.db.getMessages ? window.db.getMessages() : Promise.resolve([])
+            ]);
+        } else {
+            complaints = typeof getComplaints === 'function' ? getComplaints() : [];
+            messages = typeof getMessages === 'function' ? getMessages() : [];
+        }
+        const total = complaints.length;
+        const pending = complaints.filter(c => c.status === 'pending').length;
+        const resolved = complaints.filter(c => c.status === 'resolved').length;
+        const newC = complaints.filter(c => c.status === 'new').length;
+        const unread = messages.filter(m => !(m.is_read || m.read)).length;
+
+        const setVal = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+        setVal('statTotalComplaints', total);
+        setVal('statNewComplaints', newC);
+        setVal('statPendingComplaints', pending);
+        setVal('statResolvedComplaints', resolved);
+        setVal('statNewMessages', messages.length);
+        setVal('unreadCountBadge', unread);
+    }
+
+
 
     // ── 4. News Management ──
     const addNewsForm = document.getElementById('addNewsForm');
@@ -433,20 +477,33 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // ── Complaint Modal Examination & Reply Logic ──
-window.openComplaintModal = function(id) {
+window.openComplaintModal = async function(id) {
     const modal = document.getElementById('complaintModal');
     const modalBody = document.getElementById('modalComplaintBody');
     const modalId = document.getElementById('modalComplaintId');
 
-    if (!modal || !modalBody || typeof getComplaintById !== 'function') return;
+    if (!modal || !modalBody) return;
 
-    const complaint = getComplaintById(id);
-    if (!complaint) return;
+    modal.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+    modalBody.innerHTML = `<div style="text-align:center;padding:32px;color:var(--gold);">⏳ جاري جلب تفاصيل الطلب من السحابة...</div>`;
+
+    let complaint = null;
+    if (window.db && typeof window.db.getComplaintById === 'function') {
+        complaint = await window.db.getComplaintById(id);
+    } else if (typeof getComplaintById === 'function') {
+        complaint = getComplaintById(id);
+    }
+
+    if (!complaint) {
+        modalBody.innerHTML = `<div style="text-align:center;padding:32px;color:#f87171;">لم يتم العثور على الطلب.</div>`;
+        return;
+    }
 
     if (modalId) modalId.textContent = complaint.id;
 
     const statusObj = getStatusLabel(complaint.status);
-    const dateStr = formatDate(complaint.createdAt || complaint.date);
+    const dateStr = formatDate(complaint.created_at || complaint.createdAt || complaint.date);
 
     modalBody.innerHTML = `
         <div class="complaint-details-grid" style="display:grid; grid-template-columns:1fr 1fr; gap:1.2rem; margin-bottom:1.5rem;">
@@ -457,7 +514,7 @@ window.openComplaintModal = function(id) {
             </div>
             <div>
                 <p><strong>📍 المنطقة / البلدية:</strong> ${complaint.location || 'غير محدد'}</p>
-                <p><strong>🏛️ القطاع:</strong> ${complaint.sector || 'عام'}</p>
+                <p><strong>🏛️ نوع الطلب:</strong> ${complaint.type || 'عام'}</p>
                 <p><strong>📅 تاريخ التقديم:</strong> ${dateStr}</p>
             </div>
         </div>
@@ -466,6 +523,13 @@ window.openComplaintModal = function(id) {
             <h4 style="color:var(--gold); margin-bottom:0.5rem;">📋 موضوع الطلب: ${complaint.subject}</h4>
             <p style="color:#e2e8f0; line-height:1.7; white-space:pre-line;">${complaint.details || 'لا توجد تفاصيل إضافية.'}</p>
         </div>
+
+        ${complaint.officialResponse ? `
+        <div style="background:rgba(0,98,51,0.18);border:1px solid rgba(0,168,84,0.35);border-right:4px solid var(--gold);border-radius:8px;padding:14px 18px;margin-bottom:1.5rem;">
+            <strong style="color:var(--gold);">🏛️ الرد الرسمي الحالي:</strong>
+            <p style="color:#f1f5f9;margin-top:8px;line-height:1.7;white-space:pre-line;">${complaint.officialResponse}</p>
+        </div>
+        ` : ''}
 
         <form id="modalResponseForm" onsubmit="handleSaveComplaintResponse(event, '${complaint.id}')">
             <div class="form-group mb-1">
@@ -478,7 +542,7 @@ window.openComplaintModal = function(id) {
                 </select>
             </div>
 
-            <div class="form-group mb-1">
+            <div class="form-group mb-2">
                 <label><strong>الرد الإداري الرسمي للمكتب البرلماني (يظهر للمواطن عند تتبع طلبه):</strong></label>
                 <textarea id="modalOfficialResponse" class="form-control" rows="4" placeholder="اكتب نص الرد الرسمي أو تفاصيل المراسلة الموجهة للهيئة المعنية...">${complaint.officialResponse || ''}</textarea>
             </div>
@@ -490,14 +554,13 @@ window.openComplaintModal = function(id) {
 
             <div class="d-flex justify-content-end gap-1">
                 <button type="button" class="btn btn-outline" onclick="closeComplaintModal()">إلغاء</button>
-                <button type="submit" class="btn btn-primary">💾 حفظ التحديث والرد الرسمي</button>
+                <button type="submit" class="btn btn-primary">💾 حفظ التحديث والرد الرسمي في السحابة</button>
             </div>
         </form>
     `;
 
-    modal.style.display = 'flex';
-    document.body.style.overflow = 'hidden';
-};
+
+
 
 window.closeComplaintModal = function() {
     const modal = document.getElementById('complaintModal');
@@ -505,29 +568,27 @@ window.closeComplaintModal = function() {
     document.body.style.overflow = '';
 };
 
-window.handleSaveComplaintResponse = function(e, id) {
+window.handleSaveComplaintResponse = async function(e, id) {
     e.preventDefault();
+    const saveBtn = e.target.querySelector('button[type="submit"]');
+    if (saveBtn) { saveBtn.disabled = true; saveBtn.textContent = '⏳ جاري الحفظ في السحابة...'; }
+
     const newStatus = document.getElementById('modalStatusSelect').value;
     const officialResp = document.getElementById('modalOfficialResponse').value.trim();
     const internalNote = document.getElementById('modalInternalNote').value.trim();
 
-    if (typeof updateComplaintStatus === 'function') {
+    // Save to Supabase cloud
+    if (window.db && typeof window.db.updateComplaintStatus === 'function') {
+        await window.db.updateComplaintStatus(id, newStatus, officialResp);
+    } else if (typeof updateComplaintStatus === 'function') {
         updateComplaintStatus(id, newStatus, officialResp, internalNote);
-        closeComplaintModal();
-        
-        // Refresh Table and Stats
-        const searchInput = document.getElementById('adminComplaintSearch');
-        if (searchInput) searchInput.dispatchEvent(new Event('input'));
-        
-        const stats = typeof getStats === 'function' ? getStats() : {};
-        const setVal = (elmId, val) => { const el = document.getElementById(elmId); if (el && val !== undefined) el.textContent = val; };
-        setVal('statTotalComplaints', stats.total);
-        setVal('statNewComplaints', stats.newCount);
-        setVal('statPendingComplaints', stats.pending);
-        setVal('statResolvedComplaints', stats.resolved);
-
-        if (typeof showToast === 'function') showToast('تم حفظ الرد وتحديث حالة الطلب بنجاح! ✅', 'success');
-        else alert('تم التحديث بنجاح');
     }
-};
 
+    closeComplaintModal();
+    
+    // Refresh Table and Stats
+    await renderAdminComplaints();
+    await loadDashboardStatsAsync();
+
+    if (typeof showToast === 'function') showToast('تم حفظ الرد وتحديث حالة الطلب في السحابة بنجاح! ✅', 'success');
+};

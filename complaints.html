@@ -10,6 +10,9 @@
   <link rel="stylesheet" href="css/main.css?v=20261009_1">
   <link rel="stylesheet" href="css/complaints.css">
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <!-- Supabase must load before everything else -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase-client.js"></script>
 </head>
 <body>
 
@@ -399,8 +402,6 @@
   </div>
 </footer>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="js/supabase-client.js"></script>
 <script src="js/data.js"></script>
 <script src="js/main.js?v=20261010_2"></script>
 <script src="js/complaints.js"></script>

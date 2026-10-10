@@ -16,17 +16,24 @@ if (typeof supabase !== 'undefined') {
 window.db = {
   // 1. الشكاوى
   async getComplaints() {
-    if (!supabaseClient) return [];
+    if (!supabaseClient) {
+      console.error("❌ supabaseClient is NULL — Supabase CDN not loaded yet!");
+      return [];
+    }
     try {
-      // إضافة مهلة زمنية 8 ثوانٍ لتجنب التعليق الطويل
+      console.log("🔄 Fetching complaints from Supabase...");
       const fetchPromise = supabaseClient.from('complaints').select('*').order('created_at', { ascending: false });
-      const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error('Supabase request timed out')), 8000));
+      const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error('Supabase timeout after 8s')), 8000));
       
       const { data, error } = await Promise.race([fetchPromise, timeoutPromise]);
-      if (error) throw error;
+      if (error) {
+        console.error("❌ Supabase error:", error.message, error.code, error.hint);
+        throw error;
+      }
+      console.log(`✅ Supabase returned ${(data||[]).length} complaints`);
       return data || [];
     } catch(e) {
-      console.warn("Supabase load error or timeout, returning empty array:", e);
+      console.error("❌ getComplaints failed:", e.message);
       return [];
     }
   },

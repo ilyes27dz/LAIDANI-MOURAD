@@ -132,6 +132,13 @@ document.addEventListener('DOMContentLoaded', () => {
             );
         }
 
+        // ترتيب حسب الأحدث (الأحدث أولاً)
+        complaints.sort((a, b) => {
+            const dateA = new Date(a.created_at || a.createdAt || a.date || 0);
+            const dateB = new Date(b.created_at || b.createdAt || b.date || 0);
+            return dateB - dateA;
+        });
+
         if (complaints.length === 0) {
             listElem.innerHTML = `
                 <tr>
@@ -146,13 +153,14 @@ document.addEventListener('DOMContentLoaded', () => {
         listElem.innerHTML = complaints.map(c => {
             const statusObj = getStatusLabel(c.status);
             const dateStr = formatDate(c.created_at || c.createdAt || c.date);
+            const hasAttachments = c.attachments && c.attachments.length > 0;
             return `
                 <tr>
                     <td><strong style="color:var(--gold);">${c.id}</strong></td>
                     <td><small>${dateStr}</small></td>
                     <td><strong>${c.name}</strong><br><small class="text-muted">${c.phone || '-'}</small></td>
                     <td>${c.location || 'غير محدد'}</td>
-                    <td>${c.subject}</td>
+                    <td>${c.subject} ${hasAttachments ? '<span title="مرفقات" style="margin-right:6px;font-size:16px;">📎</span>' : ''}</td>
                     <td><span class="badge-tag" style="background:rgba(255,255,255,0.08);">${c.type || 'عام'}</span></td>
                     <td><span class="badge-tag ${statusObj.class}">${statusObj.icon} ${statusObj.text}</span></td>
                     <td>

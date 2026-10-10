@@ -11,6 +11,6 @@
     { "source": "/complaints", "destination": "/complaints.html" },
     { "source": "/media", "destination": "/media.html" },
     { "source": "/contact", "destination": "/contact.html" },
-    { "source": "/admin", "destination": "/admin.html" }
+    { "source": "/admin-02", "destination": "/admin-02.html" }
   ]
 }

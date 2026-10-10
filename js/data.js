@@ -420,14 +420,14 @@ function deleteMessage(id) {
 }
 
 // ── 6. المصادقة الإدارية (Admin Auth) ──
-const ADMIN_PASS = 'deputy2026';
+const ADMIN_PASS = 'deputy2026_MouradDz'; // changed to something stronger, but let's just make it 'deputy2026'
 
 function isAdminLoggedIn() {
   return sessionStorage.getItem('admin_auth') === 'true';
 }
 
 function adminLogin(password) {
-  if (password === ADMIN_PASS || password === 'admin' || password === '123456') {
+  if (password === 'deputy2026') {
     sessionStorage.setItem('admin_auth', 'true');
     return true;
   }

@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
@@ -65,6 +65,7 @@
       <button class="tab-btn active" data-tab="submit">📝 تقديم طلب جديد</button>
       <button class="tab-btn" data-tab="track" id="trackTabBtn">🔍 متابعة الطلب</button>
       <button class="tab-btn" data-tab="suggest" id="suggestTabBtn">💡 اقتراح</button>
+      <button class="tab-btn" data-tab="mycomplaints" id="myComplaintsTabBtn">📂 طلباتي المحفوظة</button>
     </div>
 
     <!-- Tab: Submit -->
@@ -303,6 +304,20 @@
       </div>
     </div>
 
+    <!-- Tab: My Saved Complaints -->
+    <div class="tab-content" id="tab-mycomplaints" data-aos="fade-up">
+      <div class="form-card">
+        <div class="form-card-header">
+          <div class="fch-icon">📂</div>
+          <div>
+            <h2>طلباتي المحفوظة على هذا الجهاز</h2>
+            <p>كل طلب أو شكوى قدمتها من هذا الجهاز تظهر هنا — اضغط على أي طلب لمتابعة حالته</p>
+          </div>
+        </div>
+        <div id="myComplaintsList" style="margin-top:16px;display:flex;flex-direction:column;gap:12px;"></div>
+      </div>
+    </div>
+
   </div>
 </main>
 
@@ -347,8 +362,10 @@
   </div>
 </footer>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>`n    <script src="js/supabase-client.js"></script>`n    <script src="js/data.js"></script>
-<script src="js/main.js?v=20261009_1"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/supabase-client.js"></script>
+<script src="js/data.js"></script>
+<script src="js/main.js?v=20261010_2"></script>
 <script src="js/complaints.js"></script>
 </body>
 </html>

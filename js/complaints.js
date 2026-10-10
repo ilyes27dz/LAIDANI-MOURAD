@@ -197,7 +197,75 @@ async function submitComplaint(e) {
   document.getElementById('complaintForm').classList.add('hidden');
   const success = document.getElementById('submitSuccess');
   success.classList.remove('hidden');
-  document.getElementById('refNumber').textContent = complaint.id;
+  const refId = complaint.id;
+  document.getElementById('refNumber').textContent = refId;
+
+  // ── حفظ رقم التتبع محلياً على جهاز المواطن ──
+  try {
+    let myComplaints = JSON.parse(localStorage.getItem('my_complaints') || '[]');
+    myComplaints.unshift({
+      id: refId,
+      subject: data.subject || '',
+      name: data.name || '',
+      date: new Date().toISOString()
+    });
+    // احتفظ بأحدث 20 فقط
+    if (myComplaints.length > 20) myComplaints = myComplaints.slice(0, 20);
+    localStorage.setItem('my_complaints', JSON.stringify(myComplaints));
+  } catch(e) {}
+
+  // ── إضافة أزرار النسخ والمشاركة ──
+  const refEl = document.getElementById('refNumber');
+  if (refEl && refEl.parentElement) {
+    // إزالة أزرار قديمة إن وجدت
+    const oldBtns = document.getElementById('refActionBtns');
+    if (oldBtns) oldBtns.remove();
+
+    const btnGroup = document.createElement('div');
+    btnGroup.id = 'refActionBtns';
+    btnGroup.style.cssText = 'display:flex;gap:10px;justify-content:center;margin-top:12px;flex-wrap:wrap;';
+
+    // زر النسخ
+    const copyBtn = document.createElement('button');
+    copyBtn.innerHTML = '📋 نسخ رقم التتبع';
+    copyBtn.style.cssText = 'background:rgba(201,162,39,0.15);border:1px solid var(--gold);color:var(--gold);padding:8px 18px;border-radius:8px;cursor:pointer;font-family:inherit;font-size:0.9rem;transition:background 0.2s;';
+    copyBtn.onclick = () => {
+      navigator.clipboard.writeText(refId).then(() => {
+        copyBtn.innerHTML = '✅ تم النسخ!';
+        setTimeout(() => { copyBtn.innerHTML = '📋 نسخ رقم التتبع'; }, 2000);
+      }).catch(() => {
+        // fallback
+        const ta = document.createElement('textarea');
+        ta.value = refId;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+        copyBtn.innerHTML = '✅ تم النسخ!';
+        setTimeout(() => { copyBtn.innerHTML = '📋 نسخ رقم التتبع'; }, 2000);
+      });
+    };
+
+    // زر المشاركة
+    const shareBtn = document.createElement('button');
+    shareBtn.innerHTML = '📤 مشاركة رقم التتبع';
+    shareBtn.style.cssText = 'background:rgba(0,98,51,0.2);border:1px solid rgba(0,168,84,0.4);color:#4ade80;padding:8px 18px;border-radius:8px;cursor:pointer;font-family:inherit;font-size:0.9rem;transition:background 0.2s;';
+    shareBtn.onclick = () => {
+      const shareText = `رقم تتبع شكواي لدى مكتب النائب مراد لعيداني: ${refId}\nرابط التتبع: https://laidani-mourad.vercel.app/complaints.html#track`;
+      if (navigator.share) {
+        navigator.share({ title: 'رقم تتبع الشكوى', text: shareText });
+      } else {
+        navigator.clipboard.writeText(shareText).then(() => {
+          shareBtn.innerHTML = '✅ تم النسخ!';
+          setTimeout(() => { shareBtn.innerHTML = '📤 مشاركة رقم التتبع'; }, 2000);
+        });
+      }
+    };
+
+    btnGroup.appendChild(copyBtn);
+    btnGroup.appendChild(shareBtn);
+    refEl.parentElement.appendChild(btnGroup);
+  }
 
   renderRecentComplaints();
   showToast('تم تقديم شكواك وحفظها بنجاح! ✅', 'success');
@@ -389,3 +457,69 @@ function resetSuggestForm() {
   document.getElementById('suggestForm').classList.remove('hidden');
   document.getElementById('suggestSuccess').classList.add('hidden');
 }
+
+// ── طلباتي المحفوظة على الجهاز ──
+function renderMyComplaints() {
+  const container = document.getElementById('myComplaintsList');
+  if (!container) return;
+
+  let myComplaints = [];
+  try {
+    myComplaints = JSON.parse(localStorage.getItem('my_complaints') || '[]');
+  } catch(e) { myComplaints = []; }
+
+  if (myComplaints.length === 0) {
+    container.innerHTML = `
+      <div style="text-align:center;padding:32px;color:rgba(255,255,255,0.35);">
+        <div style="font-size:40px;margin-bottom:10px;">📭</div>
+        <p>لا توجد طلبات محفوظة على هذا الجهاز بعد.</p>
+        <p style="font-size:0.82rem;margin-top:4px;">عند إرسال شكوى أو اقتراح، سيُحفظ رقم تتبعه هنا تلقائياً.</p>
+      </div>
+    `;
+    return;
+  }
+
+  container.innerHTML = myComplaints.map(c => `
+    <div class="complaint-item" onclick="fillTrackInput('${c.id}')" style="cursor:pointer;">
+      <div class="ci-info">
+        <div class="ci-ref" style="color:var(--gold);">${c.id}</div>
+        <div class="ci-subject">${c.subject || 'طلب/شكوى'}</div>
+        <div class="ci-date" style="font-size:0.8rem;color:rgba(255,255,255,0.4);">📅 ${new Date(c.date).toLocaleDateString('ar-DZ')}</div>
+      </div>
+      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+        <button onclick="event.stopPropagation();copyRefId('${c.id}',this)" style="background:rgba(201,162,39,0.12);border:1px solid rgba(201,162,39,0.35);color:var(--gold);padding:5px 12px;border-radius:6px;cursor:pointer;font-size:0.8rem;font-family:inherit;">📋 نسخ</button>
+        <button onclick="event.stopPropagation();deleteMyComplaint('${c.id}')" style="background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);color:#f87171;padding:5px 12px;border-radius:6px;cursor:pointer;font-size:0.8rem;font-family:inherit;">🗑️</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function copyRefId(id, btn) {
+  navigator.clipboard.writeText(id).then(() => {
+    btn.innerHTML = '✅';
+    setTimeout(() => { btn.innerHTML = '📋 نسخ'; }, 2000);
+  }).catch(() => {
+    const ta = document.createElement('textarea');
+    ta.value = id;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    btn.innerHTML = '✅';
+    setTimeout(() => { btn.innerHTML = '📋 نسخ'; }, 2000);
+  });
+}
+
+function deleteMyComplaint(id) {
+  try {
+    let myComplaints = JSON.parse(localStorage.getItem('my_complaints') || '[]');
+    myComplaints = myComplaints.filter(c => c.id !== id);
+    localStorage.setItem('my_complaints', JSON.stringify(myComplaints));
+    renderMyComplaints();
+  } catch(e) {}
+}
+
+// تشغيل عند بدء الصفحة
+document.addEventListener('DOMContentLoaded', () => {
+  renderMyComplaints();
+});

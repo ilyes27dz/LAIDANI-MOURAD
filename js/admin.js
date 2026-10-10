@@ -8,14 +8,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const loginForm = document.getElementById('loginForm');
     const logoutBtn = document.getElementById('logoutBtn');
     
-    // Check initial login state
-    if (typeof isAdminLoggedIn === 'function' && isAdminLoggedIn()) {
-        showDashboard();
-    } else {
-        loginSection.style.display = 'flex';
-        dashboardSection.style.display = 'none';
-    }
-
     // Login Submission
     if (loginForm) {
         loginForm.addEventListener('submit', (e) => {
@@ -503,6 +495,16 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
     };
+
+    // Check initial login state after all definitions
+    if (typeof isAdminLoggedIn === 'function' && isAdminLoggedIn()) {
+        showDashboard();
+    } else {
+        const loginSection = document.getElementById('loginSection');
+        const dashboardSection = document.getElementById('dashboardSection');
+        if (loginSection) loginSection.style.display = 'flex';
+        if (dashboardSection) dashboardSection.style.display = 'none';
+    }
 });
 
 // ── Complaint Modal Examination & Reply Logic ──

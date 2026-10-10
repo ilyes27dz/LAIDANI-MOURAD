@@ -239,12 +239,8 @@ function saveDeputyInfo(info) {
 
 // ── 2. الشكاوى (Complaints) ──
 function getComplaints() {
-  try {
-    const stored = localStorage.getItem('dz_complaints');
-    if (stored) return JSON.parse(stored);
-  } catch (e) { console.error(e); }
-  localStorage.setItem('dz_complaints', JSON.stringify(DEFAULT_COMPLAINTS));
-  return DEFAULT_COMPLAINTS;
+  localStorage.removeItem('dz_complaints');
+  return [];
 }
 
 function saveComplaints(complaints) {

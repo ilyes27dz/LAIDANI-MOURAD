@@ -103,11 +103,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const sectorFilter = document.getElementById('adminSectorFilter');
     const exportCsvBtn = document.getElementById('exportCsvBtn');
 
-    if (complaintSearch) complaintSearch.addEventListener('input', renderAdminComplaints);
-    if (complaintFilter) complaintFilter.addEventListener('change', renderAdminComplaints);
-    if (sectorFilter) sectorFilter.addEventListener('change', renderAdminComplaints);
-    if (exportCsvBtn) exportCsvBtn.addEventListener('click', exportComplaintsToCSV);
-
+    // تعريف الدالة أولاً قبل ربطها بأي حدث
     window.renderAdminComplaints = async function() {
         const listElem = document.getElementById('adminComplaintsList');
         if (!listElem) return;
@@ -187,6 +183,11 @@ document.addEventListener('DOMContentLoaded', () => {
             listElem.innerHTML = `<tr><td colspan="8" style="color:red;text-align:center;">خطأ في عرض الشكاوى: ${err.message}</td></tr>`;
         }
     }
+
+    if (complaintSearch) complaintSearch.addEventListener('input', window.renderAdminComplaints);
+    if (complaintFilter) complaintFilter.addEventListener('change', window.renderAdminComplaints);
+    if (sectorFilter) sectorFilter.addEventListener('change', window.renderAdminComplaints);
+    if (exportCsvBtn) exportCsvBtn.addEventListener('click', exportComplaintsToCSV);
 
     // Export CSV
     function exportComplaintsToCSV() {

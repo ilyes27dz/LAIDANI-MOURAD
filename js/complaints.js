@@ -59,6 +59,9 @@ function validatePhone(input, errorEl, strict = false) {
   if (val.length === 10 && algerianPattern.test(val)) {
     if (errorEl) errorEl.style.display = 'none';
     input.style.borderColor = '#22c55e';
+    // نقل التركيز للإيميل
+    const emailInput = document.getElementById('cEmail');
+    if (emailInput && !strict) emailInput.focus();
     return true;
   }
 
@@ -112,6 +115,9 @@ function initLiveValidation() {
         setFieldError(ninInput, ninError, `رقم التعريف الوطني ناقص — أدخلت ${val.length} من أصل 16 رقماً`);
       } else if (val.length === 16) {
         setFieldOk(ninInput, ninError);
+        // نقل التركيز تلقائياً للحقل التالي (الدائرة)
+        const dairaSelect = document.getElementById('cDaira');
+        if (dairaSelect) dairaSelect.focus();
       }
     });
     ninInput.addEventListener('blur', () => {
@@ -241,6 +247,7 @@ function updateCommunes() {
       opt.textContent = c;
       communeSelect.appendChild(opt);
     });
+    communeSelect.focus();
   }
 }
 

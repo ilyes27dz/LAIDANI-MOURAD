@@ -99,7 +99,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (sectorFilter) sectorFilter.addEventListener('change', renderAdminComplaints);
     if (exportCsvBtn) exportCsvBtn.addEventListener('click', exportComplaintsToCSV);
 
-    async function renderAdminComplaints() {
+    window.renderAdminComplaints = async function() {
         const listElem = document.getElementById('adminComplaintsList');
         if (!listElem) return;
 

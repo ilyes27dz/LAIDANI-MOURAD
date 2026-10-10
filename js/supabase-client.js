@@ -36,6 +36,7 @@ window.db = {
       name: complaintData.name,
       phone: complaintData.phone || '',
       email: complaintData.email || '',
+      national_id: complaintData.national_id || '',
       location: complaintData.location,
       type: complaintData.type,
       subject: complaintData.subject,

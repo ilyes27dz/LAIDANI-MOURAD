@@ -516,6 +516,7 @@ window.openComplaintModal = async function(id) {
             <div>
                 <p><strong>👤 المواطن:</strong> ${complaint.name}</p>
                 <p><strong>📞 رقم الهاتف:</strong> ${complaint.phone || 'غير متوفر'}</p>
+                <p><strong>🪪 رقم التعريف الوطني:</strong> <span style="font-family:monospace;letter-spacing:1px;color:#fbbf24;">${complaint.national_id || 'غير مسجّل'}</span></p>
                 <p><strong>✉️ البريد الإلكتروني:</strong> ${complaint.email || 'غير متوفر'}</p>
             </div>
             <div>

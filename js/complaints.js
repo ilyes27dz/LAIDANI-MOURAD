@@ -168,6 +168,45 @@ async function submitComplaint(e) {
     showToast('⚠️ رقم الهاتف غير صحيح — يجب أن يكون 10 أرقام ويبدأ بـ 05 أو 06 أو 07', 'warning');
     return;
   }
+  if (phoneError) { phoneError.style.display = 'none'; phoneInput.style.borderColor = ''; }
+
+  // ── التحقق من رقم التعريف الوطني (NIN) ──
+  const ninInput = document.getElementById('cNationalId');
+  const ninError = document.getElementById('ninError');
+  const ninVal = ninInput ? ninInput.value.trim() : '';
+
+  if (!ninVal || ninVal.length !== 16 || !/^\d{16}$/.test(ninVal)) {
+    if (ninError) { ninError.textContent = '⚠️ رقم التعريف الوطني يجب أن يكون 16 رقماً بالضبط'; ninError.style.display = 'block'; }
+    if (ninInput) { ninInput.style.borderColor = '#f87171'; ninInput.focus(); }
+    showToast('⚠️ رقم التعريف الوطني يجب أن يكون 16 رقماً بالضبط', 'warning');
+    return;
+  }
+
+  // ── فحص القيد الزمني: طلب واحد لكل رقم تعريف كل 3 أشهر ──
+  try {
+    const ninHistory = JSON.parse(localStorage.getItem('nin_cooldown') || '{}');
+    const lastSubmit = ninHistory[ninVal];
+    if (lastSubmit) {
+      const lastDate = new Date(lastSubmit);
+      const now = new Date();
+      const diffDays = (now - lastDate) / (1000 * 60 * 60 * 24);
+      if (diffDays < 90) {
+        const daysLeft = Math.ceil(90 - diffDays);
+        const nextDate = new Date(lastDate);
+        nextDate.setDate(nextDate.getDate() + 90);
+        const nextDateStr = nextDate.toLocaleDateString('ar-DZ', { year: 'numeric', month: 'long', day: 'numeric' });
+        if (ninError) {
+          ninError.innerHTML = `⛔ لقد قدّمت طلباً من قبل برقم تعريفك الوطني.<br>يمكنك تقديم طلب جديد بعد <strong style="color:#fbbf24;">${daysLeft} يوم</strong> (في: ${nextDateStr})`;
+          ninError.style.display = 'block';
+        }
+        if (ninInput) ninInput.style.borderColor = '#f59e0b';
+        showToast(`⛔ يُسمح بطلب واحد كل 3 أشهر لكل رقم تعريف. متبقٍّ ${daysLeft} يوم`, 'warning');
+        return;
+      }
+    }
+  } catch(e) {}
+  if (ninError) { ninError.style.display = 'none'; }
+  if (ninInput) ninInput.style.borderColor = '';
 
   btn.disabled = true;
   btn.innerHTML = '<span>⏳ جاري الإرسال وحفظ الطلب في السحابة...</span>';
@@ -213,6 +252,7 @@ async function submitComplaint(e) {
     name: document.getElementById('cName').value,
     phone: document.getElementById('cPhone').value,
     email: document.getElementById('cEmail').value,
+    national_id: ninVal,
     location: fullLocation,
     type: document.getElementById('cType').value,
     subject: document.getElementById('cSubject').value,
@@ -245,6 +285,13 @@ async function submitComplaint(e) {
     // احتفظ بأحدث 20 فقط
     if (myComplaints.length > 20) myComplaints = myComplaints.slice(0, 20);
     localStorage.setItem('my_complaints', JSON.stringify(myComplaints));
+  } catch(e) {}
+
+  // ── حفظ رقم التعريف الوطني مع تاريخ الإرسال لمنع التكرار قبل 3 أشهر ──
+  try {
+    const ninHistory = JSON.parse(localStorage.getItem('nin_cooldown') || '{}');
+    ninHistory[ninVal] = new Date().toISOString();
+    localStorage.setItem('nin_cooldown', JSON.stringify(ninHistory));
   } catch(e) {}
 
   // ── إضافة أزرار النسخ والمشاركة ──

@@ -95,35 +95,17 @@
     </div>
 
     <div class="hero-image" data-aos="fade-left">
-      <div class="deputy-card">
-        <div class="deputy-photo-wrap">
-          <div class="deputy-photo-container">
-            <img src="assets/deputy.jpg" alt="الأستاذ مراد لعيداني" class="deputy-photo-img" onerror="this.src='09.jpg'">
-          </div>
-          <!-- Official Algerian Flag -->
-          <div class="deputy-flag" title="الجمهورية الجزائرية الديمقراطية الشعبية 🇩🇿">
-            <svg viewBox="0 0 900 600" width="100%" height="100%">
-              <rect width="450" height="600" fill="#006233"/>
-              <rect x="450" width="450" height="600" fill="#ffffff"/>
-              <circle cx="450" cy="300" r="150" fill="#d21034"/>
-              <circle cx="485" cy="300" r="120" fill="#ffffff"/>
-              <polygon points="450,225 470,285 530,285 480,320 500,380 450,345 400,380 420,320 370,285 430,285" fill="#d21034"/>
-            </svg>
-          </div>
-          <!-- Official APN Logo Badge -->
-          <div class="apn-badge" title="المجلس الشعبي الوطني الجزائري">
-            <img src="assets/apn-logo.jpg" alt="شعار المجلس الشعبي الوطني" onerror="this.src='10.jpg'">
-          </div>
-        </div>
-        <div class="deputy-card-info">
-          <h3 id="deputyNameCard">مراد لعيداني</h3>
-          <p>نائب برلماني (محامٍ سابقاً) — <span id="deputyRegionCard">سيدي لخضر، ولاية مستغانم</span></p>
-          <div class="card-badges">
-            <span class="cbadge green">🏛️ المجلس الشعبي الوطني</span>
-            <span class="cbadge gold">⭐ الفترة التشريعية 2026 - 2031</span>
-          </div>
-        </div>
+      <!-- صورة الواجهة الرئيسية مع إمكانية التكبير -->
+      <div class="acceuil-img-wrap" onclick="openImgLightbox(this)">
+        <img src="assets/acceuil.jpg" alt="الموقع الرسمي للنائب البرلماني لعيداني مراد" class="acceuil-main-img">
+        <div class="zoom-hint">🔍 اضغط للتكبير</div>
       </div>
+    </div>
+
+    <!-- Lightbox لتكبير الصورة -->
+    <div id="imgLightbox" class="img-lightbox" onclick="closeImgLightbox()">
+      <button class="lightbox-close" onclick="closeImgLightbox()">✕</button>
+      <img src="assets/acceuil.jpg" alt="الموقع الرسمي للنائب البرلماني لعيداني مراد" class="lightbox-img">
     </div>
   </div>
 
@@ -426,6 +408,24 @@
 <script src="js/data.js"></script>
 <script src="js/main.js?v=20261009_1"></script>
 <script src="js/home.js"></script>
+<script>
+function openImgLightbox() {
+  const lb = document.getElementById('imgLightbox');
+  if (lb) {
+    lb.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+}
+function closeImgLightbox() {
+  const lb = document.getElementById('imgLightbox');
+  if (lb) {
+    lb.classList.remove('active');
+    document.body.style.overflow = '';
+  }
+}
+// Close with Escape key
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeImgLightbox(); });
+</script>
 </body>
 </html>
 

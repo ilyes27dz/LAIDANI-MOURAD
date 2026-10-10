@@ -74,6 +74,16 @@ function validatePhone(input, errorEl, strict = false) {
   return false;
 }
 
+function closeSuccessModal() {
+  const m = document.getElementById('submitSuccessModal');
+  if (m) m.style.display = 'none';
+}
+
+function resetForm() {
+  closeSuccessModal();
+  document.getElementById('complaintForm').classList.remove('hidden');
+}
+
 // ── تحقق فوري من الحقول عند التعبئة ──
 function setFieldError(input, errorEl, msg) {
   if (input) { input.style.borderColor = '#f87171'; input.style.boxShadow = '0 0 0 3px rgba(248,113,113,0.15)'; }
@@ -385,9 +395,19 @@ async function submitComplaint(e) {
     complaint = addComplaint(data);
   }
 
-  document.getElementById('complaintForm').classList.add('hidden');
-  const success = document.getElementById('submitSuccess');
-  success.classList.remove('hidden');
+  document.getElementById('complaintForm').reset();
+  clearField(document.getElementById('cNationalId'), document.getElementById('ninError'));
+  clearField(document.getElementById('cPhone'), document.getElementById('phoneError'));
+  clearField(document.getElementById('cEmail'), document.getElementById('emailError'));
+  clearField(document.getElementById('cName'), document.getElementById('nameError'));
+  btn.disabled = false;
+  btn.innerHTML = `
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+    إرسال الشكوى
+  `;
+
+  const successModal = document.getElementById('submitSuccessModal');
+  if (successModal) successModal.style.display = 'flex';
   const refId = complaint.id;
   document.getElementById('refNumber').textContent = refId;
 

@@ -18,11 +18,15 @@ window.db = {
   async getComplaints() {
     if (!supabaseClient) return [];
     try {
-      const { data, error } = await supabaseClient.from('complaints').select('*').order('created_at', { ascending: false });
+      // إضافة مهلة زمنية 8 ثوانٍ لتجنب التعليق الطويل
+      const fetchPromise = supabaseClient.from('complaints').select('*').order('created_at', { ascending: false });
+      const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error('Supabase request timed out')), 8000));
+      
+      const { data, error } = await Promise.race([fetchPromise, timeoutPromise]);
       if (error) throw error;
       return data || [];
     } catch(e) {
-      console.warn("Supabase fallback to local:", e);
+      console.warn("Supabase load error or timeout, returning empty array:", e);
       return [];
     }
   },

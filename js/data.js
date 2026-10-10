@@ -454,7 +454,9 @@ function formatDate(dateStr) {
   if (!dateStr) return '';
   try {
     const date = new Date(dateStr);
-    return date.toLocaleDateString('ar-DZ', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+    const d = date.toLocaleDateString('ar-DZ', { year: 'numeric', month: 'long', day: 'numeric' });
+    const t = date.toLocaleTimeString('ar-DZ', { hour: '2-digit', minute: '2-digit' });
+    return `${d} على الساعة ${t}`;
   } catch (e) {
     return dateStr;
   }

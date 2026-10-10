@@ -107,9 +107,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                 ` : ''}
 
-                <div style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 16px; display:flex; justify-content:space-between; align-items:center;">
+                <div style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 16px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
                     <span style="color:var(--gold); font-size:12px;">المجلس الشعبي الوطني الجزائري 🇩🇿</span>
-                    <button class="btn btn-sm btn-outline" onclick="window.print()">🖨️ طباعة الوثيقة</button>
+                    <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                        ${item.documentUrl ? `<a href="${item.documentUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-primary" style="text-decoration:none;">📄 الجريدة الرسمية (PDF)</a>` : ''}
+                        <button class="btn btn-sm btn-outline" onclick="window.print()">🖨️ طباعة الوثيقة</button>
+                    </div>
                 </div>
             `;
         }

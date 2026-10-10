@@ -1,4 +1,4 @@
-const CACHE_NAME = 'deputy-pwa-v2';
+const CACHE_NAME = 'deputy-pwa-v3';
 const urlsToCache = [
   '/',
   '/index.html',
@@ -28,6 +28,11 @@ self.addEventListener('activate', event => {
 });
 
 self.addEventListener('fetch', event => {
+  // تجاهل أي طلبات للروابط الخارجية (مثل Supabase أو CDN) لمنع أخطاء CORS
+  if (!event.request.url.startsWith(self.location.origin)) {
+    return;
+  }
+
   // للطلبات الهامة (HTML, JS) نحاول الشبكة أولاً لتجنب مشكلة الـ Cache
   if (event.request.destination === 'document' || event.request.destination === 'script') {
     event.respondWith(

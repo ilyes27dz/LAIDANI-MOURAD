@@ -14,15 +14,23 @@ if (typeof supabase !== 'undefined') {
 
 // دوال مساعدة موحدة لقاعدة البيانات
 window.db = {
+  getClient() {
+    if (!supabaseClient && typeof supabase !== 'undefined') {
+      supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    }
+    return supabaseClient;
+  },
+  
   // 1. الشكاوى
   async getComplaints() {
-    if (!supabaseClient) {
+    const client = window.db.getClient();
+    if (!client) {
       console.error("❌ supabaseClient is NULL — Supabase CDN not loaded yet!");
       return [];
     }
     try {
       console.log("🔄 Fetching complaints from Supabase...");
-      const fetchPromise = supabaseClient.from('complaints').select('*').order('created_at', { ascending: false });
+      const fetchPromise = client.from('complaints').select('*').order('created_at', { ascending: false });
       const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error('Supabase timeout after 8s')), 8000));
       
       const { data, error } = await Promise.race([fetchPromise, timeoutPromise]);
@@ -183,9 +191,10 @@ window.db = {
   },
 
   async getMessages() {
-    if (!supabaseClient) return [];
+    const client = window.db.getClient();
+    if (!client) return [];
     try {
-      const { data, error } = await supabaseClient.from('messages').select('*').order('created_at', { ascending: false });
+      const { data, error } = await client.from('messages').select('*').order('created_at', { ascending: false });
       if (error) throw error;
       return data || [];
     } catch(e) {

@@ -358,25 +358,26 @@ async function submitComplaint(e) {
     btn.innerHTML = '<span>⏳ جاري رفع المرفقات...</span>';
     const files = Array.from(fileInput.files).slice(0, 5); // حد أقصى 5 ملفات
     for (const file of files) {
-      if (window.supabaseClient || (window.db && window.db.supabaseClient)) {
-        const client = window.supabaseClient || (typeof supabase !== 'undefined' ? supabase.createClient("https://vvufhimhsrbsnmtuqouk.supabase.co", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ2dWZoaW1oc3Jic25tdHVxb3VrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODcyMzIwOTgsImV4cCI6MjEwMjgwODA5OH0.hGm4NUSHGeJeo6LR3W7RUhp9TvSzwYJfXe9Kd5broak") : null);
-        if (client) {
-          const fileExt = file.name.split('.').pop();
-          const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
-          try {
-            const { data: uploadData, error: uploadError } = await client.storage.from('attachments').upload(fileName, file);
-            if (!uploadError && uploadData) {
-              const { data: urlData } = client.storage.from('attachments').getPublicUrl(fileName);
-              if (urlData && urlData.publicUrl) {
-                attachments.push({
-                  name: file.name,
-                  url: urlData.publicUrl,
-                  type: file.type
-                });
-              }
+      if (typeof supabase !== 'undefined') {
+        // ننشئ العميل مباشرة هنا لضمان الرفع
+        const client = supabase.createClient("https://vvufhimhsrbsnmtuqouk.supabase.co", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ2dWZoaW1oc3Jic25tdHVxb3VrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODcyMzIwOTgsImV4cCI6MjEwMjgwODA5OH0.hGm4NUSHGeJeo6LR3W7RUhp9TvSzwYJfXe9Kd5broak");
+        const fileExt = file.name.split('.').pop();
+        const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
+        try {
+          const { data: uploadData, error: uploadError } = await client.storage.from('attachments').upload(fileName, file);
+          if (uploadError) {
+            console.error('Supabase upload error:', uploadError.message);
+          } else if (uploadData) {
+            const { data: urlData } = client.storage.from('attachments').getPublicUrl(fileName);
+            if (urlData && urlData.publicUrl) {
+              attachments.push({
+                name: file.name,
+                url: urlData.publicUrl,
+                type: file.type
+              });
             }
-          } catch (e) { console.error('Upload error:', e); }
-        }
+          }
+        } catch (e) { console.error('Upload exception:', e); }
       }
     }
   }

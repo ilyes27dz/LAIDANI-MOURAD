@@ -91,10 +91,12 @@ document.addEventListener('DOMContentLoaded', () => {
     // ── 2. Complaints Management ──
     const complaintSearch = document.getElementById('adminComplaintSearch');
     const complaintFilter = document.getElementById('adminComplaintFilter');
+    const sectorFilter = document.getElementById('adminSectorFilter');
     const exportCsvBtn = document.getElementById('exportCsvBtn');
 
     if (complaintSearch) complaintSearch.addEventListener('input', renderAdminComplaints);
     if (complaintFilter) complaintFilter.addEventListener('change', renderAdminComplaints);
+    if (sectorFilter) sectorFilter.addEventListener('change', renderAdminComplaints);
     if (exportCsvBtn) exportCsvBtn.addEventListener('click', exportComplaintsToCSV);
 
     async function renderAdminComplaints() {
@@ -105,6 +107,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const query = (complaintSearch ? complaintSearch.value : '').toLowerCase().trim();
         const filterVal = complaintFilter ? complaintFilter.value : 'all';
+        const sectorVal = document.getElementById('adminSectorFilter') ? document.getElementById('adminSectorFilter').value : 'all';
 
         let complaints = [];
         if (window.db && typeof window.db.getComplaints === 'function') {
@@ -115,6 +118,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (filterVal !== 'all') {
             complaints = complaints.filter(c => c.status === filterVal);
+        }
+        if (sectorVal !== 'all') {
+            complaints = complaints.filter(c => c.sector === sectorVal || c.type === sectorVal);
         }
 
         if (query) {

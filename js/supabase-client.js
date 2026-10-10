@@ -16,14 +16,14 @@ if (typeof supabase !== 'undefined') {
 window.db = {
   // 1. الشكاوى
   async getComplaints() {
-    if (!supabaseClient) return (typeof getComplaints === 'function') ? getComplaints() : [];
+    if (!supabaseClient) return [];
     try {
       const { data, error } = await supabaseClient.from('complaints').select('*').order('created_at', { ascending: false });
       if (error) throw error;
-      return data && data.length > 0 ? data : (typeof getComplaints === 'function' ? getComplaints() : []);
+      return data || [];
     } catch(e) {
       console.warn("Supabase fallback to local:", e);
-      return (typeof getComplaints === 'function') ? getComplaints() : [];
+      return [];
     }
   },
 
@@ -56,6 +56,25 @@ window.db = {
     if (typeof addComplaint === 'function') {
       try { addComplaint(item); } catch(e) {}
     }
+
+    // إرسال إشعار عبر البريد الإلكتروني للنائب
+    try {
+      fetch("https://formsubmit.co/ajax/LAIDANI.MOURAD@GMAIL.COM", {
+        method: "POST",
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({
+          _subject: `إشعار جديد: شكوى/طلب من ${item.name}`,
+          _template: "box",
+          الرقم_المرجعي: item.id,
+          الاسم: item.name,
+          رقم_الهاتف: item.phone,
+          البلدية: item.location,
+          القطاع: item.type,
+          الموضوع: item.subject,
+          التفاصيل: item.details
+        })
+      });
+    } catch(err) { console.error("Email notification error", err); }
 
     return item;
   },
@@ -129,16 +148,33 @@ window.db = {
     if (typeof addMessage === 'function') {
       try { addMessage(msg); } catch(e) {}
     }
+
+    // إرسال إشعار عبر البريد الإلكتروني للنائب
+    try {
+      fetch("https://formsubmit.co/ajax/LAIDANI.MOURAD@GMAIL.COM", {
+        method: "POST",
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({
+          _subject: `رسالة تواصل جديدة من ${msg.name}`,
+          _template: "box",
+          الاسم: msg.name,
+          رقم_الهاتف: msg.phone,
+          البريد_الإلكتروني: msg.email,
+          الموضوع: msg.subject,
+          الرسالة: msg.message
+        })
+      });
+    } catch(err) { console.error("Email notification error", err); }
   },
 
   async getMessages() {
-    if (!supabaseClient) return (typeof getMessages === 'function') ? getMessages() : [];
+    if (!supabaseClient) return [];
     try {
       const { data, error } = await supabaseClient.from('messages').select('*').order('created_at', { ascending: false });
       if (error) throw error;
-      return data && data.length > 0 ? data : (typeof getMessages === 'function' ? getMessages() : []);
+      return data || [];
     } catch(e) {
-      return (typeof getMessages === 'function') ? getMessages() : [];
+      return [];
     }
   }
 };

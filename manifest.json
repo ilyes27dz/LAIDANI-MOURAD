@@ -1,0 +1,27 @@
+{
+  "name": "النائب مراد لعيداني",
+  "short_name": "مراد لعيداني",
+  "description": "الموقع والتطبيق الرسمي للنائب البرلماني مراد لعيداني - ولاية مستغانم",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#C9A227",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "assets/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    },
+    {
+      "src": "assets/apn-logo.jpg",
+      "sizes": "192x192",
+      "type": "image/jpeg"
+    },
+    {
+      "src": "assets/apn-logo.jpg",
+      "sizes": "512x512",
+      "type": "image/jpeg"
+    }
+  ]
+}

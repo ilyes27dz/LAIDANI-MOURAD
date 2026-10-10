@@ -1,11 +1,11 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>نبذة عن النائب الأستاذ مراد لعيداني | الموقع الرسمي</title>
+    <title>نبذة عن النائب البرلماني مراد لعيداني | الموقع الرسمي</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/main.css?v=20261009_1">
+    <link rel="stylesheet" href="css/main.css?v=20261010_2">
     <link rel="stylesheet" href="css/deputy.css">
     <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 </head>
@@ -34,7 +34,7 @@
 
     <header class="page-hero">
         <div class="hero-content">
-            <h1>نبذة عن النائب الأستاذ مراد لعيداني</h1>
+            <h1>النائب البرلماني مراد لعيداني</h1>
             <p>السيرة الذاتية، المسار المهني، والبرنامج الانتخابي</p>
         </div>
     </header>
@@ -43,9 +43,16 @@
         <div class="container">
             <div class="bio-grid">
                 <div class="bio-image-col">
-                    <div class="photo-placeholder">
-                        <img src="assets/deputy.jpg" alt="الأستاذ مراد لعيداني" class="deputy-bio-img" onerror="this.src='09.jpg'">
-                        <div class="flag-overlay"></div>
+                    <!-- صورة الواجهة مع إمكانية التكبير -->
+                    <div class="acceuil-img-wrap" onclick="openDeputyLightbox()" style="cursor:pointer;border-radius:18px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,0.5),0 0 0 2px rgba(201,162,39,0.35);transition:transform 0.3s ease,box-shadow 0.3s ease;position:relative;">
+                        <img src="assets/acceuil.jpg" alt="النائب البرلماني مراد لعيداني" style="width:100%;height:auto;display:block;border-radius:18px;">
+                        <div style="position:absolute;bottom:14px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,0.65);color:#C9A227;font-size:0.82rem;padding:5px 16px;border-radius:30px;border:1px solid rgba(201,162,39,0.4);white-space:nowrap;pointer-events:none;">🔍 اضغط للتكبير</div>
+                    </div>
+
+                    <!-- Lightbox -->
+                    <div id="deputyLightbox" onclick="closeDeputyLightbox()" style="display:none;position:fixed;inset:0;z-index:10000;background:rgba(0,0,0,0.92);align-items:center;justify-content:center;cursor:zoom-out;">
+                        <button onclick="closeDeputyLightbox()" style="position:fixed;top:20px;left:24px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:#fff;font-size:1.4rem;width:44px;height:44px;border-radius:50%;cursor:pointer;z-index:10001;display:flex;align-items:center;justify-content:center;">✕</button>
+                        <img src="assets/acceuil.jpg" alt="النائب البرلماني مراد لعيداني" style="max-width:93vw;max-height:93vh;border-radius:14px;box-shadow:0 0 60px rgba(201,162,39,0.3);object-fit:contain;">
                     </div>
                 </div>
                 <div class="bio-content-col">
@@ -93,8 +100,19 @@
     </footer>
 
     <script src="js/data.js"></script>
-    <script src="js/main.js?v=20261009_1"></script>
+    <script src="js/main.js?v=20261010_2"></script>
     <script src="js/deputy.js"></script>
+    <script>
+    function openDeputyLightbox() {
+        const lb = document.getElementById('deputyLightbox');
+        if (lb) { lb.style.display = 'flex'; document.body.style.overflow = 'hidden'; }
+    }
+    function closeDeputyLightbox() {
+        const lb = document.getElementById('deputyLightbox');
+        if (lb) { lb.style.display = 'none'; document.body.style.overflow = ''; }
+    }
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDeputyLightbox(); });
+    </script>
 </body>
 </html>
 

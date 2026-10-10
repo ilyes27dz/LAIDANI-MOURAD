@@ -54,16 +54,25 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // ── Load Everything on Login ──
-    function showDashboard() {
+    async function showDashboard() {
         if (loginSection) loginSection.style.display = 'none';
         if (dashboardSection) dashboardSection.style.display = 'block';
         loadDashboardStats();
-        renderAdminComplaints();
         renderAdminMessages();
         renderAdminNews();
         renderAdminArchive();
         populateSettingsForm();
-        // Also kick off async cloud load
+
+        // تحميل الشكاوى من السحابة بعد تهيئة supabase
+        await window.renderAdminComplaints();
+
+        // إعادة المحاولة بعد 1.5 ثانية إذا جاءت القائمة فارغة
+        setTimeout(async () => {
+            const listElem = document.getElementById('adminComplaintsList');
+            const rows = listElem ? listElem.querySelectorAll('tr td[colspan]') : [];
+            if (rows.length > 0) await window.renderAdminComplaints();
+        }, 1500);
+
         setTimeout(() => {
             if (typeof loadDashboardStatsAsync === 'function') loadDashboardStatsAsync();
         }, 500);
@@ -143,35 +152,40 @@ document.addEventListener('DOMContentLoaded', () => {
             listElem.innerHTML = `
                 <tr>
                     <td colspan="8" class="text-center py-4" style="color:rgba(255,255,255,0.4);">
-                        لا توجد شكاوى أو انشغالات تطابق البحث
+                        لا توجد شكاوى أو انشغالات حالياً في السحابة
                     </td>
                 </tr>
             `;
             return;
         }
 
-        listElem.innerHTML = complaints.map(c => {
-            const statusObj = getStatusLabel(c.status);
-            const dateStr = formatDate(c.created_at || c.createdAt || c.date);
-            const hasAttachments = c.attachments && c.attachments.length > 0;
-            return `
-                <tr>
-                    <td><strong style="color:var(--gold);">${c.id}</strong></td>
-                    <td><small>${dateStr}</small></td>
-                    <td><strong>${c.name}</strong><br><small class="text-muted">${c.phone || '-'}</small></td>
-                    <td>${c.location || 'غير محدد'}</td>
-                    <td>${c.subject} ${hasAttachments ? '<span title="مرفقات" style="margin-right:6px;font-size:16px;">📎</span>' : ''}</td>
-                    <td><span class="badge-tag" style="background:rgba(255,255,255,0.08);">${c.type || 'عام'}</span></td>
-                    <td><span class="badge-tag ${statusObj.class}">${statusObj.icon} ${statusObj.text}</span></td>
-                    <td>
-                        <div class="action-btn-group">
-                            <button class="btn btn-xs btn-primary" onclick="openComplaintModal('${c.id}')">معاينة / رد</button>
-                            <button class="btn btn-xs btn-danger" onclick="handleDeleteComplaint('${c.id}')">🗑️</button>
-                        </div>
-                    </td>
-                </tr>
-            `;
-        }).join('');
+        try {
+            listElem.innerHTML = complaints.map(c => {
+                const statusObj = getStatusLabel(c.status);
+                const dateStr = formatDate(c.created_at || c.createdAt || c.date);
+                const hasAttachments = c.attachments && c.attachments.length > 0;
+                return `
+                    <tr>
+                        <td><strong style="color:var(--gold);">${c.id}</strong></td>
+                        <td><small>${dateStr}</small></td>
+                        <td><strong>${c.name}</strong><br><small class="text-muted">${c.phone || '-'}</small></td>
+                        <td>${c.location || 'غير محدد'}</td>
+                        <td>${c.subject || '-'} ${hasAttachments ? '<span title="مرفقات" style="margin-right:6px;font-size:16px;">📎</span>' : ''}</td>
+                        <td><span class="badge-tag" style="background:rgba(255,255,255,0.08);">${c.type || 'عام'}</span></td>
+                        <td><span class="badge-tag ${statusObj.class}">${statusObj.icon} ${statusObj.text}</span></td>
+                        <td>
+                            <div class="action-btn-group">
+                                <button class="btn btn-xs btn-primary" onclick="openComplaintModal('${c.id}')">معاينة / رد</button>
+                                <button class="btn btn-xs btn-danger" onclick="handleDeleteComplaint('${c.id}')">🗑️</button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        } catch (err) {
+            console.error(err);
+            listElem.innerHTML = `<tr><td colspan="8" style="color:red;text-align:center;">خطأ في عرض الشكاوى: ${err.message}</td></tr>`;
+        }
     }
 
     // Export CSV
@@ -547,22 +561,36 @@ window.openComplaintModal = async function(id) {
             <p style="color:#e2e8f0; line-height:1.7; white-space:pre-line;">${complaint.details || 'لا توجد تفاصيل إضافية.'}</p>
             
             <!-- المرفقات -->
-            ${complaint.attachments && complaint.attachments.length > 0 ? `
-              <div style="margin-top:16px;border-top:1px solid rgba(255,255,255,0.05);padding-top:12px;">
-                <div style="font-size:12px;color:rgba(255,255,255,0.5);margin-bottom:8px;">المرفقات (${complaint.attachments.length}):</div>
+            ${(() => {
+              let atts = complaint.attachments;
+              if (typeof atts === 'string') { try { atts = JSON.parse(atts); } catch(e) { atts = []; } }
+              if (!Array.isArray(atts) || atts.length === 0) return '';
+              return `
+              <div style="margin-top:16px;border-top:1px solid rgba(255,255,255,0.05);padding-top:14px;">
+                <div style="font-size:13px;color:var(--gold);margin-bottom:10px;font-weight:600;">📎 المرفقات (${atts.length}):</div>
                 <div style="display:flex;gap:12px;flex-wrap:wrap;">
-                  ${complaint.attachments.map(att => `
-                    <a href="${att.url}" target="_blank" style="display:inline-flex;flex-direction:column;align-items:center;background:rgba(0,0,0,0.5);padding:8px;border-radius:6px;border:1px solid rgba(255,255,255,0.15);text-decoration:none;color:#fff;width:100px;transition:all 0.2s;" onmouseover="this.style.borderColor='var(--gold)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.15)'">
-                      ${att.type.startsWith('image') ? 
-                        `<img src="${att.url}" style="width:100%;height:60px;object-fit:cover;border-radius:4px;margin-bottom:6px;">` : 
-                        `<div style="font-size:24px;margin-bottom:6px;height:60px;display:flex;align-items:center;justify-content:center;">🎥</div>`
+                  ${atts.map(att => {
+                    const url = att.url || att;
+                    const name = att.name || 'ملف';
+                    const type = att.type || (typeof url === 'string' && url.match(/\.(jpg|jpeg|png|gif|webp)$/i) ? 'image/jpeg' : 'video/mp4');
+                    const isImg = type.startsWith('image');
+                    return `
+                    <a href="${url}" target="_blank" rel="noopener"
+                      style="display:inline-flex;flex-direction:column;align-items:center;background:rgba(0,0,0,0.5);
+                      padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.15);
+                      text-decoration:none;color:#fff;width:120px;transition:all 0.2s;cursor:pointer;"
+                      onmouseover="this.style.borderColor='var(--gold)';this.style.transform='scale(1.04)';"
+                      onmouseout="this.style.borderColor='rgba(255,255,255,0.15)';this.style.transform='scale(1)';">
+                      ${isImg ?
+                        `<img src="${url}" loading="lazy" style="width:100%;height:80px;object-fit:cover;border-radius:6px;margin-bottom:6px;" onerror="this.style.display='none'">` :
+                        `<div style="font-size:32px;margin-bottom:6px;height:80px;display:flex;align-items:center;justify-content:center;">🎥</div>`
                       }
-                      <span style="font-size:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;">${att.name}</span>
-                    </a>
-                  `).join('')}
+                      <span style="font-size:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;color:rgba(255,255,255,0.7);">${name}</span>
+                    </a>`;
+                  }).join('')}
                 </div>
-              </div>
-            ` : ''}
+              </div>`;
+            })()}
         </div>
 
         ${complaint.officialResponse ? `

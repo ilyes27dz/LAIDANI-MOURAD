@@ -271,31 +271,60 @@ async function submitComplaint(e) {
     return;
   }
 
-  // ── فحص القيد الزمني: طلب واحد لكل رقم تعريف كل 3 أشهر ──
-  try {
-    const ninHistory = JSON.parse(localStorage.getItem('nin_cooldown') || '{}');
-    const lastSubmit = ninHistory[ninVal];
-    if (lastSubmit) {
-      const lastDate = new Date(lastSubmit);
-      const now = new Date();
-      const diffDays = (now - lastDate) / (1000 * 60 * 60 * 24);
-      if (diffDays < 90) {
-        const daysLeft = Math.ceil(90 - diffDays);
-        const nextDate = new Date(lastDate);
-        nextDate.setDate(nextDate.getDate() + 90);
-        const nextDateStr = nextDate.toLocaleDateString('ar-DZ', { year: 'numeric', month: 'long', day: 'numeric' });
-        if (ninError) {
-          ninError.innerHTML = `⛔ لقد قدّمت طلباً من قبل برقم تعريفك الوطني.<br>يمكنك تقديم طلب جديد بعد <strong style="color:#fbbf24;">${daysLeft} يوم</strong> (في: ${nextDateStr})`;
-          ninError.style.display = 'block';
+  // ── فحص القيد الزمني الموحد ──
+  function checkCooldown(key, value, inputEl, errorEl, label) {
+    try {
+      const history = JSON.parse(localStorage.getItem(key) || '{}');
+      const lastSubmit = history[value];
+      if (lastSubmit) {
+        const lastDate = new Date(lastSubmit);
+        const diffDays = (new Date() - lastDate) / (1000 * 60 * 60 * 24);
+        if (diffDays < 90) {
+          const daysLeft = Math.ceil(90 - diffDays);
+          const nextDate = new Date(lastDate);
+          nextDate.setDate(nextDate.getDate() + 90);
+          const nextDateStr = nextDate.toLocaleDateString('ar-DZ', { year: 'numeric', month: 'long', day: 'numeric' });
+          if (errorEl) {
+            errorEl.innerHTML = `⛔ تم استخدام هذا ${label} في طلب سابق.<br>يمكنك إرسال طلب جديد بعد <strong style="color:#fbbf24;">${daysLeft} يوم</strong> (في: ${nextDateStr})`;
+            errorEl.style.display = 'block';
+          }
+          if (inputEl) { inputEl.style.borderColor = '#f59e0b'; inputEl.style.boxShadow = '0 0 0 3px rgba(245,158,11,0.15)'; inputEl.focus(); }
+          showToast(`⛔ ${label} مُستخدَم — متبقٍّ ${daysLeft} يوم للطلب التالي`, 'warning');
+          return false;
         }
-        if (ninInput) ninInput.style.borderColor = '#f59e0b';
-        showToast(`⛔ يُسمح بطلب واحد كل 3 أشهر لكل رقم تعريف. متبقٍّ ${daysLeft} يوم`, 'warning');
-        return;
       }
-    }
-  } catch(e) {}
+    } catch(e) {}
+    return true;
+  }
+
+  // فحص رقم التعريف الوطني
+  if (!checkCooldown('nin_cooldown', ninVal, ninInput, ninError, 'رقم التعريف الوطني')) return;
   if (ninError) { ninError.style.display = 'none'; }
-  if (ninInput) ninInput.style.borderColor = '';
+  if (ninInput) { ninInput.style.borderColor = '#22c55e'; ninInput.style.boxShadow = '0 0 0 3px rgba(34,197,94,0.12)'; }
+
+  // ── فحص رقم الهاتف (كل 3 أشهر) ──
+  const phoneVal = phoneInput ? phoneInput.value.trim() : '';
+  if (!checkCooldown('phone_cooldown', phoneVal, phoneInput, phoneError, 'رقم الهاتف')) return;
+  if (phoneError) { phoneError.style.display = 'none'; }
+  if (phoneInput) { phoneInput.style.borderColor = '#22c55e'; }
+
+  // ── فحص البريد الإلكتروني (كل 3 أشهر) ──
+  const emailInput = document.getElementById('cEmail');
+  const emailError = document.getElementById('emailError');
+  const emailVal = emailInput ? emailInput.value.trim() : '';
+  if (emailVal) {
+    // التحقق من صحة الصيغة أولاً
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailVal)) {
+      if (emailError) { emailError.innerHTML = '⚠️ البريد الإلكتروني غير صحيح — مثال: name@email.com'; emailError.style.display = 'block'; }
+      if (emailInput) { emailInput.style.borderColor = '#f87171'; emailInput.style.boxShadow = '0 0 0 3px rgba(248,113,113,0.15)'; emailInput.focus(); }
+      showToast('⚠️ البريد الإلكتروني غير صحيح', 'warning');
+      return;
+    }
+    // فحص القيد الزمني
+    if (!checkCooldown('email_cooldown', emailVal, emailInput, emailError, 'البريد الإلكتروني')) return;
+    if (emailError) { emailError.style.display = 'none'; }
+    if (emailInput) { emailInput.style.borderColor = '#22c55e'; }
+  }
 
   btn.disabled = true;
   btn.innerHTML = '<span>⏳ جاري الإرسال وحفظ الطلب في السحابة...</span>';
@@ -376,11 +405,26 @@ async function submitComplaint(e) {
     localStorage.setItem('my_complaints', JSON.stringify(myComplaints));
   } catch(e) {}
 
-  // ── حفظ رقم التعريف الوطني مع تاريخ الإرسال لمنع التكرار قبل 3 أشهر ──
+  // ── حفظ رقم التعريف الوطني، الهاتف، والبريد الإلكتروني مع تاريخ الإرسال لمنع التكرار قبل 3 أشهر ──
   try {
+    const nowStr = new Date().toISOString();
+    
+    // NIN
     const ninHistory = JSON.parse(localStorage.getItem('nin_cooldown') || '{}');
-    ninHistory[ninVal] = new Date().toISOString();
+    if (ninVal) ninHistory[ninVal] = nowStr;
     localStorage.setItem('nin_cooldown', JSON.stringify(ninHistory));
+    
+    // Phone
+    const phoneHistory = JSON.parse(localStorage.getItem('phone_cooldown') || '{}');
+    if (phoneVal) phoneHistory[phoneVal] = nowStr;
+    localStorage.setItem('phone_cooldown', JSON.stringify(phoneHistory));
+    
+    // Email
+    if (emailVal) {
+      const emailHistory = JSON.parse(localStorage.getItem('email_cooldown') || '{}');
+      emailHistory[emailVal] = nowStr;
+      localStorage.setItem('email_cooldown', JSON.stringify(emailHistory));
+    }
   } catch(e) {}
 
   // ── إضافة أزرار النسخ والمشاركة ──

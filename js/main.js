@@ -74,7 +74,8 @@ function initHamburger() {
     hamburger.classList.add('active');
     navLinks.classList.add('open');
     overlay.classList.add('show');
-    document.body.style.overflow = 'hidden';
+    // قفل التمرير فقط على الموبايل
+    if (window.innerWidth <= 768) document.body.style.overflow = 'hidden';
   }
 
   function closeMenu() {
@@ -89,6 +90,22 @@ function initHamburger() {
 
   // إغلاق بضغط Escape
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeMenu(); });
+
+  // ── إغلاق القائمة عند الضغط على أي رابط والانتقال للصفحة ──
+  navLinks.querySelectorAll('.nav-link').forEach(link => {
+    link.addEventListener('click', (e) => {
+      const href = link.getAttribute('href');
+      if (href && !href.startsWith('#')) {
+        // إغلاق القائمة فوراً ثم الانتقال
+        closeMenu();
+        // تأخير بسيط للسماح بإغلاق القائمة
+        setTimeout(() => { window.location.href = href; }, 80);
+        e.preventDefault();
+      } else {
+        closeMenu();
+      }
+    });
+  });
 }
 
 // ─── Active Nav Link ────────────────────────────────────────

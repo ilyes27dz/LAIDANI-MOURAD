@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
@@ -165,6 +165,13 @@
           <div class="form-group">
             <label class="form-label">تفاصيل الشكوى <span style="color:rgba(255,255,255,0.35);font-size:12px;">(اختياري)</span></label>
             <textarea class="form-textarea" id="cDetails" placeholder="اشرح مشكلتك بالتفصيل... (المكان، التاريخ، الجهات المعنية...) — اختياري" style="min-height:180px;"></textarea>
+          </div>
+
+          <!-- إضافة المرفقات (صور، فيديو) -->
+          <div class="form-group">
+            <label class="form-label">إرفاق صور أو فيديو <span style="color:rgba(255,255,255,0.35);font-size:12px;">(اختياري)</span></label>
+            <input type="file" id="cAttachments" multiple accept="image/*,video/*" class="form-input" style="padding:10px;">
+            <p style="font-size:11px;color:rgba(255,255,255,0.4);margin-top:4px;">يمكنك اختيار أكثر من ملف. الحد الأقصى 5 ملفات.</p>
           </div>
 
           <div class="form-check">

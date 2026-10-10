@@ -177,6 +177,38 @@ async function submitComplaint(e) {
   const address = document.getElementById('cAddress') ? document.getElementById('cAddress').value : '';
   const fullLocation = `بلدية ${commune} (${daira}) — ${address}`;
 
+  const fileInput = document.getElementById('cAttachments');
+  let attachments = [];
+  
+  if (fileInput && fileInput.files.length > 0) {
+    btn.innerHTML = '<span>⏳ جاري رفع المرفقات...</span>';
+    const files = Array.from(fileInput.files).slice(0, 5); // حد أقصى 5 ملفات
+    for (const file of files) {
+      if (window.supabaseClient || (window.db && window.db.supabaseClient)) {
+        const client = window.supabaseClient || (typeof supabase !== 'undefined' ? supabase.createClient("https://vvufhimhsrbsnmtuqouk.supabase.co", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ2dWZoaW1oc3Jic25tdHVxb3VrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODcyMzIwOTgsImV4cCI6MjEwMjgwODA5OH0.hGm4NUSHGeJeo6LR3W7RUhp9TvSzwYJfXe9Kd5broak") : null);
+        if (client) {
+          const fileExt = file.name.split('.').pop();
+          const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
+          try {
+            const { data: uploadData, error: uploadError } = await client.storage.from('attachments').upload(fileName, file);
+            if (!uploadError && uploadData) {
+              const { data: urlData } = client.storage.from('attachments').getPublicUrl(fileName);
+              if (urlData && urlData.publicUrl) {
+                attachments.push({
+                  name: file.name,
+                  url: urlData.publicUrl,
+                  type: file.type
+                });
+              }
+            }
+          } catch (e) { console.error('Upload error:', e); }
+        }
+      }
+    }
+  }
+
+  btn.innerHTML = '<span>⏳ جاري حفظ الطلب في السحابة...</span>';
+
   const data = {
     name: document.getElementById('cName').value,
     phone: document.getElementById('cPhone').value,
@@ -184,7 +216,8 @@ async function submitComplaint(e) {
     location: fullLocation,
     type: document.getElementById('cType').value,
     subject: document.getElementById('cSubject').value,
-    details: document.getElementById('cDetails').value
+    details: document.getElementById('cDetails').value,
+    attachments: attachments
   };
 
   let complaint = null;
@@ -316,10 +349,10 @@ async function trackFull() {
 
   const status = getStatusLabel(complaint.status);
   const steps = [
-    { label: 'تم الاستلام', done: true, desc: 'توثيق الطلب وتسجيله' },
-    { label: 'دراسة الملف', done: complaint.status !== 'new', desc: 'فحص الوثائق والتأكد من الاختصاص' },
-    { label: 'المتابعة والمساءلة', done: complaint.status === 'pending' || complaint.status === 'resolved', desc: 'مراسلة الإدارة أو الوزارة المعنية' },
-    { label: 'المعالجة والرد', done: complaint.status === 'resolved', desc: 'استلام الإجابة وتبليغ المواطن' }
+    { label: 'مرسلة', done: true, desc: 'تم إرسال الطلب بنجاح' },
+    { label: 'مُستلَمة', done: complaint.status !== 'new' && complaint.status !== 'sent', desc: 'تم استلام الطلب من طرف النائب' },
+    { label: 'تحت المعاينة', done: complaint.status === 'reviewing' || complaint.status === 'pending' || complaint.status === 'responded' || complaint.status === 'resolved', desc: 'جاري دراسة الملف أو مراسلة الجهات' },
+    { label: 'تم الرد', done: complaint.status === 'responded' || complaint.status === 'resolved' || complaint.status === 'rejected', desc: 'تم معالجة الطلب والرد عليه' }
   ];
 
   result.innerHTML = `
@@ -335,6 +368,24 @@ async function trackFull() {
       <div style="font-size:12px;color:var(--gold);margin-bottom:4px;">موضوع الانشغال / الشكوى</div>
       <div style="font-size:17px;font-weight:700;color:var(--white);">${complaint.subject}</div>
       ${complaint.details ? `<p style="font-size:14px;color:#94a3b8;margin-top:8px;line-height:1.6;">${complaint.details}</p>` : ''}
+      
+      <!-- المرفقات -->
+      ${complaint.attachments && complaint.attachments.length > 0 ? `
+        <div style="margin-top:16px;border-top:1px solid rgba(255,255,255,0.05);padding-top:12px;">
+          <div style="font-size:12px;color:rgba(255,255,255,0.5);margin-bottom:8px;">المرفقات (${complaint.attachments.length}):</div>
+          <div style="display:flex;gap:12px;flex-wrap:wrap;">
+            ${complaint.attachments.map(att => `
+              <a href="${att.url}" target="_blank" style="display:inline-flex;flex-direction:column;align-items:center;background:rgba(0,0,0,0.3);padding:8px;border-radius:6px;border:1px solid rgba(255,255,255,0.1);text-decoration:none;color:#fff;width:100px;transition:all 0.2s;" onmouseover="this.style.borderColor='var(--gold)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.1)'">
+                ${att.type.startsWith('image') ? 
+                  `<img src="${att.url}" style="width:100%;height:60px;object-fit:cover;border-radius:4px;margin-bottom:6px;">` : 
+                  `<div style="font-size:24px;margin-bottom:6px;height:60px;display:flex;align-items:center;justify-content:center;">🎥</div>`
+                }
+                <span style="font-size:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;">${att.name}</span>
+              </a>
+            `).join('')}
+          </div>
+        </div>
+      ` : ''}
     </div>
 
     <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(140px, 1fr));gap:12px;margin-bottom:24px;background:rgba(0,0,0,0.2);padding:12px;border-radius:8px;">

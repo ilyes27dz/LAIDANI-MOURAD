@@ -40,7 +40,8 @@ window.db = {
       type: complaintData.type,
       subject: complaintData.subject,
       details: complaintData.details,
-      status: 'pending',
+      attachments: complaintData.attachments || [],
+      status: 'sent',
       response: '',
       created_at: new Date().toISOString()
     };

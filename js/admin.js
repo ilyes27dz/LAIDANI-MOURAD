@@ -260,9 +260,9 @@ document.addEventListener('DOMContentLoaded', () => {
             messages = typeof getMessages === 'function' ? getMessages() : [];
         }
         const total = complaints.length;
-        const pending = complaints.filter(c => c.status === 'pending').length;
-        const resolved = complaints.filter(c => c.status === 'resolved').length;
-        const newC = complaints.filter(c => c.status === 'new').length;
+        const pending = complaints.filter(c => c.status === 'pending' || c.status === 'reviewing' || c.status === 'received').length;
+        const resolved = complaints.filter(c => c.status === 'resolved' || c.status === 'responded').length;
+        const newC = complaints.filter(c => c.status === 'new' || c.status === 'sent').length;
         const unread = messages.filter(m => !(m.is_read || m.read)).length;
 
         const setVal = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
@@ -528,6 +528,24 @@ window.openComplaintModal = async function(id) {
         <div style="background:rgba(0,0,0,0.3); padding:1.2rem; border-radius:8px; margin-bottom:1.5rem; border:1px solid rgba(255,255,255,0.06);">
             <h4 style="color:var(--gold); margin-bottom:0.5rem;">📋 موضوع الطلب: ${complaint.subject}</h4>
             <p style="color:#e2e8f0; line-height:1.7; white-space:pre-line;">${complaint.details || 'لا توجد تفاصيل إضافية.'}</p>
+            
+            <!-- المرفقات -->
+            ${complaint.attachments && complaint.attachments.length > 0 ? `
+              <div style="margin-top:16px;border-top:1px solid rgba(255,255,255,0.05);padding-top:12px;">
+                <div style="font-size:12px;color:rgba(255,255,255,0.5);margin-bottom:8px;">المرفقات (${complaint.attachments.length}):</div>
+                <div style="display:flex;gap:12px;flex-wrap:wrap;">
+                  ${complaint.attachments.map(att => `
+                    <a href="${att.url}" target="_blank" style="display:inline-flex;flex-direction:column;align-items:center;background:rgba(0,0,0,0.5);padding:8px;border-radius:6px;border:1px solid rgba(255,255,255,0.15);text-decoration:none;color:#fff;width:100px;transition:all 0.2s;" onmouseover="this.style.borderColor='var(--gold)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.15)'">
+                      ${att.type.startsWith('image') ? 
+                        `<img src="${att.url}" style="width:100%;height:60px;object-fit:cover;border-radius:4px;margin-bottom:6px;">` : 
+                        `<div style="font-size:24px;margin-bottom:6px;height:60px;display:flex;align-items:center;justify-content:center;">🎥</div>`
+                      }
+                      <span style="font-size:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;">${att.name}</span>
+                    </a>
+                  `).join('')}
+                </div>
+              </div>
+            ` : ''}
         </div>
 
         ${complaint.officialResponse ? `
@@ -541,10 +559,11 @@ window.openComplaintModal = async function(id) {
             <div class="form-group mb-1">
                 <label><strong>تحديث حالة الطلب:</strong></label>
                 <select id="modalStatusSelect" class="form-control">
-                    <option value="new" ${complaint.status === 'new' ? 'selected' : ''}>📩 طلب جديد (تم الاستلام)</option>
-                    <option value="pending" ${complaint.status === 'pending' ? 'selected' : ''}>⏳ قيد المعالجة والمساءلة الإدارية</option>
-                    <option value="resolved" ${complaint.status === 'resolved' ? 'selected' : ''}>✅ تمت المعالجة والرد النهائي</option>
-                    <option value="rejected" ${complaint.status === 'rejected' ? 'selected' : ''}>❌ غير مطابق للاختصاص</option>
+                    <option value="sent" ${complaint.status === 'sent' || complaint.status === 'new' ? 'selected' : ''}>📩 مرسلة (من المواطن)</option>
+                    <option value="received" ${complaint.status === 'received' ? 'selected' : ''}>📥 مُستلَمة (تم الاطلاع عليها)</option>
+                    <option value="reviewing" ${complaint.status === 'reviewing' || complaint.status === 'pending' ? 'selected' : ''}>🔍 تحت المعاينة والدراسة</option>
+                    <option value="responded" ${complaint.status === 'responded' || complaint.status === 'resolved' ? 'selected' : ''}>✅ تم الرد والمعالجة النهائية</option>
+                    <option value="rejected" ${complaint.status === 'rejected' ? 'selected' : ''}>❌ مرفوضة / غير مطابق للاختصاص</option>
                 </select>
             </div>
 

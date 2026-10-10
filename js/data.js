@@ -443,9 +443,9 @@ function getStats() {
   const complaints = getComplaints();
   return {
     total: complaints.length,
-    newCount: complaints.filter(c => c.status === 'new').length,
-    pending: complaints.filter(c => c.status === 'pending').length,
-    resolved: complaints.filter(c => c.status === 'resolved').length
+    newCount: complaints.filter(c => c.status === 'sent' || c.status === 'new').length,
+    pending: complaints.filter(c => c.status === 'received' || c.status === 'reviewing' || c.status === 'pending').length,
+    resolved: complaints.filter(c => c.status === 'responded' || c.status === 'resolved').length
   };
 }
 
@@ -454,7 +454,7 @@ function formatDate(dateStr) {
   if (!dateStr) return '';
   try {
     const date = new Date(dateStr);
-    return date.toLocaleDateString('ar-DZ', { year: 'numeric', month: 'long', day: 'numeric' });
+    return date.toLocaleDateString('ar-DZ', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' });
   } catch (e) {
     return dateStr;
   }
@@ -462,12 +462,16 @@ function formatDate(dateStr) {
 
 function getStatusLabel(status) {
   const labels = {
-    new: { text: 'طلب جديد', class: 'status-new', icon: '📩', step: 1 },
-    pending: { text: 'قيد المعالجة والمتابعة', class: 'status-pending', icon: '⏳', step: 3 },
-    resolved: { text: 'تمت المعالجة والرد', class: 'status-resolved', icon: '✅', step: 4 },
-    rejected: { text: 'غير مطابق للاختصاص', class: 'status-rejected', icon: '❌', step: 0 }
+    new: { text: 'مرسلة', class: 'status-new', icon: '📤', step: 1 },
+    sent: { text: 'مرسلة', class: 'status-new', icon: '📤', step: 1 },
+    received: { text: 'مُستلَمة', class: 'status-received', icon: '📥', step: 2 },
+    pending: { text: 'تحت المعاينة', class: 'status-pending', icon: '🔍', step: 3 },
+    reviewing: { text: 'تحت المعاينة', class: 'status-pending', icon: '🔍', step: 3 },
+    resolved: { text: 'تم الرد', class: 'status-resolved', icon: '✅', step: 4 },
+    responded: { text: 'تم الرد', class: 'status-resolved', icon: '✅', step: 4 },
+    rejected: { text: 'مرفوضة / لا توافق الاختصاص', class: 'status-rejected', icon: '❌', step: 4 }
   };
-  return labels[status] || labels.new;
+  return labels[status] || labels.sent;
 }
 
 function getTypeLabel(type) {

@@ -10,7 +10,45 @@ document.addEventListener('DOMContentLoaded', () => {
   applyDeputyInfo();
   setActiveNavLink();
   initPWA();
+  
+  // تحديث الإحصائيات الحقيقية قبل تشغيل العداد
+  initStatsAsync().then(() => {
+    initCounters();
+  });
 });
+
+async function initStatsAsync() {
+  const statNumbers = document.querySelectorAll('.stat-number[data-target]');
+  if (statNumbers.length < 4) return;
+
+  try {
+    let resolvedCount = 0;
+    let totalCitizens = 0;
+    
+    if (window.db && typeof window.db.getComplaints === 'function') {
+      const complaints = await window.db.getComplaints();
+      totalCitizens = complaints.length;
+      resolvedCount = complaints.filter(c => c.status === 'resolved' || c.status === 'responded').length;
+    }
+
+    let newsCount = typeof getNews === 'function' ? getNews().length : 12;
+
+    // 0: ملف معالج (Resolved complaints)
+    statNumbers[0].setAttribute('data-target', resolvedCount.toString());
+    
+    // 1: جلسة برلمانية (5 as requested)
+    statNumbers[1].setAttribute('data-target', '5');
+    
+    // 2: تصريح رسمي (News/Archive count)
+    statNumbers[2].setAttribute('data-target', newsCount.toString());
+    
+    // 3: مواطن تواصل معنا (Total complaints)
+    statNumbers[3].setAttribute('data-target', totalCitizens.toString());
+    
+  } catch (err) {
+    console.error("Error updating stats", err);
+  }
+}
 
 function initPWA() {
   if ('serviceWorker' in navigator) {

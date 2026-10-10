@@ -95,11 +95,13 @@ window.db = {
             name: data.name,
             phone: data.phone,
             email: data.email,
+            national_id: data.national_id || '',
             location: data.location,
             type: data.type,
             subject: data.subject,
             details: data.details,
             status: data.status,
+            attachments: data.attachments || [],
             officialResponse: data.response || '',
             createdAt: data.created_at,
             updatedAt: data.updated_at

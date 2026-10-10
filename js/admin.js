@@ -506,6 +506,14 @@ window.openComplaintModal = async function(id) {
         return;
     }
 
+    // ── تغيير تلقائي: عندما يفتح النائب الطلب للمرة الأولى تصبح "مُستلَمة" ──
+    if (complaint.status === 'sent' || complaint.status === 'new') {
+        if (window.db && typeof window.db.updateComplaintStatus === 'function') {
+            await window.db.updateComplaintStatus(id, 'received', '');
+            complaint.status = 'received'; // تحديث الكائن المحلي أيضاً
+        }
+    }
+
     if (modalId) modalId.textContent = complaint.id;
 
     const statusObj = getStatusLabel(complaint.status);

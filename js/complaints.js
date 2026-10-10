@@ -74,6 +74,95 @@ function validatePhone(input, errorEl, strict = false) {
   return false;
 }
 
+// ── تحقق فوري من الحقول عند التعبئة ──
+function setFieldError(input, errorEl, msg) {
+  if (input) { input.style.borderColor = '#f87171'; input.style.boxShadow = '0 0 0 3px rgba(248,113,113,0.15)'; }
+  if (errorEl) { errorEl.innerHTML = '⚠️ ' + msg; errorEl.style.display = 'block'; }
+}
+function setFieldOk(input, errorEl) {
+  if (input) { input.style.borderColor = '#22c55e'; input.style.boxShadow = '0 0 0 3px rgba(34,197,94,0.12)'; }
+  if (errorEl) { errorEl.style.display = 'none'; }
+}
+function clearField(input, errorEl) {
+  if (input) { input.style.borderColor = ''; input.style.boxShadow = ''; }
+  if (errorEl) { errorEl.style.display = 'none'; }
+}
+
+function initLiveValidation() {
+  // ─── رقم التعريف الوطني ───
+  const ninInput = document.getElementById('cNationalId');
+  const ninError = document.getElementById('ninError');
+  if (ninInput) {
+    ninInput.addEventListener('input', () => {
+      const val = ninInput.value.trim();
+      if (val.length === 0) { clearField(ninInput, ninError); return; }
+      if (!/^\d+$/.test(val)) {
+        setFieldError(ninInput, ninError, 'يجب إدخال أرقام فقط، لا يُسمح بالحروف');
+      } else if (val.length < 16) {
+        setFieldError(ninInput, ninError, `رقم التعريف الوطني ناقص — أدخلت ${val.length} من أصل 16 رقماً`);
+      } else if (val.length === 16) {
+        setFieldOk(ninInput, ninError);
+      }
+    });
+    ninInput.addEventListener('blur', () => {
+      const val = ninInput.value.trim();
+      if (val.length > 0 && val.length !== 16) {
+        setFieldError(ninInput, ninError, `رقم التعريف الوطني يجب أن يكون 16 رقماً بالضبط — أدخلت ${val.length}`);
+      }
+    });
+  }
+
+  // ─── البريد الإلكتروني ───
+  const emailInput = document.getElementById('cEmail');
+  let emailError = document.getElementById('emailError');
+  if (emailInput && !emailError) {
+    emailError = document.createElement('small');
+    emailError.id = 'emailError';
+    emailError.style.cssText = 'color:#f87171;font-size:12px;display:none;margin-top:4px;';
+    emailInput.insertAdjacentElement('afterend', emailError);
+  }
+  if (emailInput) {
+    emailInput.addEventListener('blur', () => {
+      const val = emailInput.value.trim();
+      if (val.length === 0) { clearField(emailInput, emailError); return; }
+      const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailPattern.test(val)) {
+        setFieldError(emailInput, emailError, 'البريد الإلكتروني غير صحيح — مثال: name@email.com');
+      } else {
+        setFieldOk(emailInput, emailError);
+      }
+    });
+    emailInput.addEventListener('input', () => {
+      if (emailInput.value.trim().length === 0) clearField(emailInput, emailError);
+    });
+  }
+
+  // ─── الاسم الكامل ───
+  const nameInput = document.getElementById('cName');
+  let nameError = document.getElementById('nameError');
+  if (nameInput && !nameError) {
+    nameError = document.createElement('small');
+    nameError.id = 'nameError';
+    nameError.style.cssText = 'color:#f87171;font-size:12px;display:none;margin-top:4px;';
+    nameInput.insertAdjacentElement('afterend', nameError);
+  }
+  if (nameInput) {
+    nameInput.addEventListener('blur', () => {
+      const val = nameInput.value.trim();
+      if (val.length === 0) {
+        setFieldError(nameInput, nameError, 'الاسم الكامل إجباري — يرجى إدخاله');
+      } else if (val.length < 4) {
+        setFieldError(nameInput, nameError, 'الاسم قصير جداً — يجب أن يكون 4 أحرف على الأقل');
+      } else {
+        setFieldOk(nameInput, nameError);
+      }
+    });
+    nameInput.addEventListener('input', () => {
+      if (nameInput.value.trim().length >= 4) setFieldOk(nameInput, nameError);
+    });
+  }
+}
+
 
 function initTabs() {
   const buttons = document.querySelectorAll('.tab-btn');
@@ -620,4 +709,5 @@ function deleteMyComplaint(id) {
 // تشغيل عند بدء الصفحة
 document.addEventListener('DOMContentLoaded', () => {
   renderMyComplaints();
+  initLiveValidation();
 });

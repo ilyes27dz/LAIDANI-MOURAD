@@ -558,9 +558,7 @@ window.openComplaintModal = async function(id) {
             </div>
         </form>
     `;
-
-
-
+};
 
 window.closeComplaintModal = function() {
     const modal = document.getElementById('complaintModal');
